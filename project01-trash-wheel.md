@@ -58,26 +58,26 @@ trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 
 8. Environmental Awareness: Visualizing data related to plastic bottles, polystyrene items, cigarette butts, and other waste materials can raise awareness about the types of pollutants present in water bodies. This can be instrumental in advocating for policies and initiatives aimed at reducing plastic pollution and promoting environmental sustainability.
 ## Research question and involved varaialbes
-Question 1:
+### Question 1:
 How does the composition of collected trash vary across different Trash Wheels (ID) over time (Month and Year)? Specifically, I will explore the relationship between the number of plastic bottles, polystyrene items, and glass bottles collected by each Trash Wheel in different months and years.
 
-Variables:
-ID (Trash Wheel)
-Month
-Year
-PlasticBottles
-Polystyrene
-GlassBottles
+#### Variables:
+- ID (Trash Wheel)
+- Month
+- Year
+- PlasticBottles
+- Polystyrene
+- GlassBottles
 
-Question 2:
+### Question 2:
 What is the seasonal pattern of trash accumulation in terms of weight (Weight), volume (Volume), and the number of plastic bags (PlasticBags)? I will investigate how these variables change over different months and years, considering the potential impact of seasonal factors on trash collection.
 
-Variables:
-Month
-Year
-Weight
-Volume
-PlasticBags
+#### Variables:
+- Month
+- Year
+- Weight
+- Volume
+- PlasticBags
 ## Plan for answering each ot the questions
 ### Question 1: How does the composition of collected trash vary across different Trash Wheels over time?
 
