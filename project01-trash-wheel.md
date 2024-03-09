@@ -1,3 +1,6 @@
+# Brief description of dataset
+## Provenance
+The data originates from the Mr. Trash Wheel Baltimore Healthy Harbor project, employing trash interceptors stationed at waterway ends. Powered sustainably, these interceptors, including the initial Mr. Trash Wheel, have removed over 2,362 tons of trash collectively. Data collection involves manual counting of items on conveyor paddles during dumpster filling, with averages used to estimate total trash. Random bushel samples and volunteer-led "dumpster dives" further validate methods and identify unaccounted materials.
 ## The Data
 
 ```{r}
@@ -16,13 +19,7 @@ trashwheel <- tuesdata$trashwheel
 trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-03-05/trashwheel.csv')
 
 ```
-
-## How to Participate
-- [Explore the data](https://r4ds.hadley.nz/), watching out for interesting relationships. We would like to emphasize that you should not draw conclusions about **causation** in the data. There are various moderating variables that affect all data, many of which might not have been captured in these datasets. As such, our suggestion is to use the data provided to practice your data tidying and plotting techniques, and to consider for yourself what nuances might underlie these relationships.
-- Create a visualization, a model, a [shiny app](https://shiny.posit.co/), or some other piece of data-science-related output, using R or another programming language.
-- [Share your output and the code used to generate it](../../../sharing.md) on social media with the #TidyTuesday hashtag.
-
-### Data Dictionary
+## Data Dimensions
 
 # `trashwheel.csv`
 
@@ -44,4 +41,85 @@ trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 |Wrappers       |double    |Number of wrappers       |
 |SportsBalls    |double    |Number of sports balls    |
 |HomesPowered   |double    |Homes Powered - Each ton of trash equates to on average 500 kilowatts of electricity.  An average household will use 30 kilowatts per day.   |
+## Why we should choose this dataset for project 1 ?
+1. Real-world Impact: The dataset originates from the Mr. Trash Wheel Baltimore Healthy Harbor initiative, which addresses environmental issues by removing trash from waterways. Visualizing this data can highlight the real-world impact of such initiatives, emphasizing the importance of environmental conservation.
 
+2. Multifaceted Data: The dataset includes various dimensions such as trash weight, volume, and the number of specific items like plastic bottles, cigarette butts, and more. This provides a rich source of data to explore and visualize different aspects of trash accumulation and composition.
+
+3. Temporal Analysis: With attributes like Month, Year, and Date, the dataset enables temporal analysis, allowing we to visualize trends and patterns over time. This can be valuable for understanding seasonal variations, long-term changes, or identifying specific events that influence trash accumulation.
+
+4. Comparative Analysis: The dataset includes multiple Trash Wheels, each with its own ID and Name. Visualizing data from different Trash Wheels allows for comparative analysis, exploring differences in trash collection rates, compositions, and effectiveness among the interceptors.
+
+5. Environmental Awareness: Visualizing data related to plastic bottles, polystyrene items, cigarette butts, and other waste materials can raise awareness about the types of pollutants present in water bodies. This can be instrumental in advocating for policies and initiatives aimed at reducing plastic pollution and promoting environmental sustainability.
+
+6. Energy Conversion: The dataset includes a unique attribute, "HomesPowered," which quantifies the energy generated from the collected trash. Visualizing this aspect can demonstrate the potential renewable energy benefits of waste management initiatives, reinforcing the importance of recycling and resource recovery.
+
+7. Learning Opportunity: Working with this dataset provides an opportunity to apply data visualization techniques in a meaningful context, fostering a deeper understanding of environmental issues and the role of data in addressing them.
+
+8. Environmental Awareness: Visualizing data related to plastic bottles, polystyrene items, cigarette butts, and other waste materials can raise awareness about the types of pollutants present in water bodies. This can be instrumental in advocating for policies and initiatives aimed at reducing plastic pollution and promoting environmental sustainability.
+## Research question and involved varaialbes
+Question 1:
+How does the composition of collected trash vary across different Trash Wheels (ID) over time (Month and Year)? Specifically, I will explore the relationship between the number of plastic bottles, polystyrene items, and glass bottles collected by each Trash Wheel in different months and years.
+
+Variables:
+ID (Trash Wheel)
+Month
+Year
+PlasticBottles
+Polystyrene
+GlassBottles
+
+Question 2:
+What is the seasonal pattern of trash accumulation in terms of weight (Weight), volume (Volume), and the number of plastic bags (PlasticBags)? I will investigate how these variables change over different months and years, considering the potential impact of seasonal factors on trash collection.
+
+Variables:
+Month
+Year
+Weight
+Volume
+PlasticBags
+## Plan for answering each ot the questions
+### Question 1: How does the composition of collected trash vary across different Trash Wheels over time?
+
+#### 1. Data Preparation:
+   - Load the dataset into R.
+   - Explore and clean the data if necessary.
+
+#### 2. Data Visualization:
+   - Create a line plot to visualize the trend of plastic bottles, polystyrene items, and glass bottles collected over time (Month and Year) for each Trash Wheel (ID).
+   - Use different colors or line styles to differentiate between trash types and Trash Wheels.
+   - Optionally, create additional plots such as bar charts or stacked area plots to compare the composition of collected trash among different Trash Wheels.
+
+#### 3. Insights:
+   - Identify any patterns or trends in the composition of collected trash across different Trash Wheels over time.
+   - Determine if certain Trash Wheels are more effective in collecting specific types of trash compared to others.
+
+#### 4. Variables Involved:
+   - ID (Trash Wheel)
+   - Month
+   - Year
+   - PlasticBottles
+   - Polystyrene
+   - GlassBottles
+
+### Question 2: What is the seasonal pattern of trash accumulation in terms of weight, volume, and the number of plastic bags?
+
+#### 1. Data Preparation:
+   - Load the dataset into R.
+   - Explore and clean the data if necessary.
+
+#### 2. Data Visualization:
+   - Create line plots or bar charts to visualize the seasonal pattern of trash accumulation in terms of weight, volume, and the number of plastic bags.
+   - Aggregate the data by month and year to analyze seasonal trends.
+   - Use different colors or line styles to represent each variable (weight, volume, plastic bags).
+
+#### 3. Insights:
+   - Identify any seasonal patterns in trash accumulation, such as higher accumulation during certain months or years.
+   - Determine if there are any correlations between weight, volume, and the number of plastic bags over time.
+
+#### 4. Variables Involved:
+   - Month
+   - Year
+   - Weight
+   - Volume
+   - PlasticBags
