@@ -79,15 +79,17 @@ What is the seasonal pattern of trash accumulation in terms of weight (Weight), 
 - Volume
 - PlasticBags
 ## Plan for answering each ot the questions
-### Question 1: How does the composition of collected trash vary across different Trash Wheels over time?
+### Question 1: How does the volume and weight of collected waste vary seasonally?
 
 #### 1. Data Preparation:
    - Load the dataset into R.
    - Explore and clean the data if necessary.
 
 #### 2. Data Visualization:
-   - Create a line plot to visualize the trend of plastic bottles, polystyrene items, and glass bottles collected over time (Month and Year) for each Trash Wheel (ID).
-   - Use different colors or line styles to differentiate between trash types and Trash Wheels.
+   - Create a line plot to visualize the seasonal trend of volume and weight of collected waste across different months or years.
+
+   - This figure will provide insights into the seasonal patterns of waste accumulation, allowing for comparisons between Trash Wheels.
+
    - Optionally, create additional plots such as bar charts or stacked area plots to compare the composition of collected trash among different Trash Wheels.
 
 #### 3. Insights:
@@ -102,20 +104,23 @@ What is the seasonal pattern of trash accumulation in terms of weight (Weight), 
    - Polystyrene
    - GlassBottles
 
-### Question 2: What is the seasonal pattern of trash accumulation in terms of weight, volume, and the number of plastic bags?
+### Question 2:  How does the seasonal pattern of trash accumulation vary for different types of trash (e.g., plastic bottles, glass bottles, plastic bags)?
 
 #### 1. Data Preparation:
    - Load the dataset into R.
    - Explore and clean the data if necessary.
 
 #### 2. Data Visualization:
-   - Create line plots or bar charts to visualize the seasonal pattern of trash accumulation in terms of weight, volume, and the number of plastic bags.
-   - Aggregate the data by month and year to analyze seasonal trends.
-   - Use different colors or line styles to represent each variable (weight, volume, plastic bags).
+   - Create a heatmap to visualize the correlation matrix between different types of trash (e.g., plastic bottles, polystyrene items, glass bottles, cigarette butts, wrappers, and sports balls).
+   - Generate line plots or bar charts to visualize the seasonal pattern of trash accumulation for each type of trash. Aggregate the data by month and year to analyze seasonal trends.
+   - Use boxplots or violin plots to compare the distribution of trash accumulation across different seasons (e.g., summer, winter) for each type of trash.
+   - Optionally, create scatterplots to explore potential relationships between different types of trash accumulation (e.g., plastic bottles vs. plastic bags).
+
 
 #### 3. Insights:
-   - Identify any seasonal patterns in trash accumulation, such as higher accumulation during certain months or years.
-   - Determine if there are any correlations between weight, volume, and the number of plastic bags over time.
+   - Determine if there are significant correlations between different types of trash accumulation. For example, you might find that certain types of trash tend to co-occur more frequently, indicating potential common sources or behaviors.
+   - Analyze the seasonal patterns of trash accumulation to identify if there are specific seasons when certain types of trash are more prevalent. Consider external factors such as weather or human activities that might influence trash accumulation patterns.
+   - Compare the seasonal patterns of different types of trash accumulation to understand if there are variations in trash generation based on factors such as human activities (e.g., increased outdoor activities in summer leading to more plastic bottles or sports ball litter).
 
 #### 4. Variables Involved:
    - Month
@@ -123,3 +128,4 @@ What is the seasonal pattern of trash accumulation in terms of weight (Weight), 
    - Weight
    - Volume
    - PlasticBags
+   - Other types of trash (e.g., plastic bottles, polystyrene items, glass bottles, cigarette butts, wrappers, sports balls)
