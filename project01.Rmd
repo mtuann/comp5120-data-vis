@@ -1,0 +1,74 @@
+---
+---
+---
+
+# Project 01, Team I
+# Vo Diep Nhu, V202300940
+# Vo Phi Son, V202300942
+# Nguyen Minh Tuan, V202300941
+Include `tidyverse`:
+
+```{r}
+# install.packages("tidyverse")
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+Read the data:
+```{r}
+# Read the data
+trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-03-05/trashwheel.csv')
+```
+
+Quick look at the data:
+```{r}
+# Quick look at the data
+glimpse(trashwheel)
+```
+
+```{r}
+# Add homespower2 column: by weight * 500/ 30, round by 0.5
+trashwheel <- trashwheel %>% 
+  mutate(HomesPowered3 = round(Weight * 500 / 30, 0.5))
+```
+
+
+```{r}
+# plot plastic bottle by year
+trashwheel %>% 
+  ggplot(aes(x = Year, y = PlasticBottles)) +
+  geom_point() +
+  geom_smooth() +
+  labs(title = "Plastic Bottles by Year",
+       x = "Year",
+       y = "Plastic Bottles")
+```
+
+
+
+```{r}
+# group trash by year and sum
+trashwheel %>% 
+  group_by(Year) %>% 
+  summarise(n = sum(PlasticBottles)) %>%
+  ggplot(aes(x = Year, y = n)) +
+  geom_point() +
+  geom_text(aes(label = n), vjust = -0.5) +
+  geom_line() +
+  labs(title = "Plastic Bottles by Year",
+       x = "Year",
+       y = "Total Plastic Bottles")
+```
+
+```{r}
+# plot all types of trash by year
+trashwheel %>% 
+  gather(key = "TrashType", value = "TrashCount", -Year) %>% 
+  ggplot(aes(x = Year, y = TrashCount, color = TrashType)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Trash by Year",
+       x = "Year",
+       y = "Trash Count",
+       color = "Trash Type")
+```
