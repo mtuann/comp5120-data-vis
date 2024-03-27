@@ -1,0 +1,138 @@
+
+# Project 01, Team I
+# Vo Diep Nhu, V202300940
+# Vo Phi Son, V202300942
+# Nguyen Minh Tuan, V202300941
+
+```{r}
+library(tidyverse)
+# library(RColorBrewer)
+# library(readr)
+# library(GGally)
+# library(ggfortify)
+# library(plotly)
+```
+
+
+```{r}
+# TWCD_MrTrashWheel <- read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/Trash Wheel Collection Data.xlsx - Mr. Trash Wheel.csv")
+trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-03-05/trashwheel.csv')
+```
+
+
+```{r}
+# change the value of HomesPowered = Weight * 500 / 30
+trashwheel <- trashwheel %>% 
+    mutate(HomesPowered = round(Weight * 500 / 30, 0.5))
+```
+
+
+```{r}
+trashwheel <- na.omit(trashwheel)
+```
+
+
+```{r}
+# show the column names
+# colnames(trashwheel)
+#  [1] "ID"             "Name"           "Dumpster"       "Month"         
+#  [5] "Year"           "Date"           "Weight"         "Volume"        
+#  [9] "PlasticBottles" "Polystyrene"    "CigaretteButts" "GlassBottles"  
+# [13] "PlasticBags"    "Wrappers"       "SportsBalls"    "HomesPowered" 
+# show the sum of Weight, Volume for PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by year
+sum_trashwheel <- trashwheel %>% 
+    group_by(Year) %>% 
+    summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+```
+
+
+```{r}
+# show the sum of Weight, Volume for PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by group of (year, month)
+sum_trashwheel_month <- trashwheel %>% 
+    group_by(Year, Month) %>% 
+    summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+```
+```{r}
+# show the sum of Weight, Volume for PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by group of (year, quarter)
+# the month in text "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" converted to quarter "Q1", "Q2", "Q3", "Q4"
+trashwheel <- trashwheel %>% 
+    mutate(quarter = ifelse(Month %in% c("January", "February", "March"), "Q1", ifelse(Month %in% c("April", "May", "June"), "Q2", ifelse(Month %in% c("July", "August", "September"), "Q3", "Q4"))))
+
+sum_trashwheel_quarter <- trashwheel %>% 
+    group_by(Year, quarter) %>%
+    summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+```
+
+```{r}
+# plot weight and volume by year
+ggplot(sum_trashwheel, 
+    aes(x = Year, y = sum_Weight)) + 
+    geom_line(aes(color = "Weight")) + 
+
+    geom_line(aes(x = Year, y = sum_Volume, color = "Volume")) + 
+
+    labs(title = "Weight and Volume by Year", x = "Year", y = "Weight and Volume", color = "Type") + 
+    scale_color_manual(values = c("Weight" = "red", "Volume" = "blue")) +
+    theme_minimal()
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+```{r}
+
+```{r}
+```
+```
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```

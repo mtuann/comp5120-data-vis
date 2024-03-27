@@ -9,7 +9,7 @@
 Include `tidyverse`:
 
 ```{r}
-# install.packages("tidyverse")
+# install.packages("ggfortify")
 library(tidyverse)
 theme_set(theme_minimal())
 ```
@@ -32,19 +32,146 @@ trashwheel <- trashwheel %>%
   mutate(HomesPowered3 = round(Weight * 500 / 30, 0.5))
 ```
 
+```{r}
+# show column names
+colnames(trashwheel)
+```
+
+```{r}
+trashwheel <- trashwheel |>
+  rename(
+        "id" = "ID",
+        "name" = "Name",
+        "dumpster" = "Dumpster",
+         "month" = "Month",
+         "year" = "Year",
+         "day" = "Date",
+         "weight_tons" = "Weight", #weight of all trash
+         "volume_cubic_yards" = "Volume", #volume of all trash
+         "plastic_bottles" = "PlasticBottles",
+         "polystyrene" = "Polystyrene",
+         "cigarette_butts" = "CigaretteButts",
+         "glass_bottles" = "GlassBottles",
+         "plastic_bags" = "PlasticBags",
+         "wrappers" = "Wrappers",
+         "sports_balls" = "SportsBalls",
+         "homes_powered" = "HomesPowered",
+         "homes_powered3" = "HomesPowered3" #homes powered by weight
+  )
+```
+
+```{r}
+TWCD_MrTrashWheel <- trashwheel 
+# copy value from column "homes_powered3" to "homes_powered"
+TWCD_MrTrashWheel$homes_powered <- TWCD_MrTrashWheel$homes_powered3
+# remove column "homes_powered3"
+TWCD_MrTrashWheel <- TWCD_MrTrashWheel |>
+  select(-homes_powered3)
+```
+
+```{r}
+TWCD_1 <- TWCD_MrTrashWheel |>
+  select(month, year, weight_tons, volume_cubic_yards, cigarette_butts, plastic_bottles, glass_bottles, wrappers, sports_balls)
+```
+
+```{r}
+TWCD_FUTURE <- TWCD_MrTrashWheel |>
+  select(year, month, weight_tons,volume_cubic_yards, cigarette_butts, plastic_bottles, glass_bottles, wrappers, sports_balls) |>
+  filter(month %in% c("April", "May", "June", "July", "August", "September", "October", "November", "December")) |>
+  filter(year %in% c(2020, 2021, 2022, 2023))|>
+  group_by(month, year) |>
+  summarise(total_weight_tons = sum(weight_tons), sum_volume_cubic_yards = sum(volume_cubic_yards), cigarette_butts = sum(cigarette_butts), plastic_bottles = sum(plastic_bottles), glass_bottles = sum(glass_bottles), wrappers = sum(wrappers), sports_balls = sum(sports_balls))
+``` 
+
+```{r}
+#I notice that the Class of the Year is numerical. I want to categorize it as a character.
+TWCD_1$year <- factor(TWCD_1$year)
+class(TWCD_1$year)
+```
 
 ```{r}
 # plot plastic bottle by year
-trashwheel %>% 
-  ggplot(aes(x = Year, y = PlasticBottles)) +
-  geom_point() +
-  geom_smooth() +
-  labs(title = "Plastic Bottles by Year",
-       x = "Year",
-       y = "Plastic Bottles")
+TWCD_FUTURE <- TWCD_MrTrashWheel |>
+  select(year, month, weight_tons,volume_cubic_yards, cigarette_butts, plastic_bottles, glass_bottles, wrappers, sports_balls) |>
+  filter(month %in% c("April", "May", "June", "July", "August", "September", "October", "November", "December")) |>
+  filter(year %in% c(2020, 2021, 2022, 2023))|>
+  group_by(month, year) |>
+  summarise(total_weight_tons = sum(weight_tons), sum_volume_cubic_yards = sum(volume_cubic_yards), sum_cigarette_butts = sum(cigarette_butts), sum_plastic_bottles = sum(plastic_bottles), sum_glass_bottles = sum(glass_bottles), sum_wrappers = sum(wrappers), sum_sports_balls = sum(sports_balls))
+```
+
+```{r}
+TWCD_1$year <- factor(TWCD_1$year)
+class(TWCD_1$year)
+```
+```{r}
+str(TWCD_1)
+```
+
+```{r}
+TWCD_1 <- TWCD_MrTrashWheel |>
+  select(year, month, weight_tons,volume_cubic_yards, cigarette_butts, plastic_bottles, glass_bottles, wrappers, sports_balls) |>
+  filter(month %in% c("April", "May", "June", "July", "August", "September", "October", "November", "December")) |>
+  filter(year %in% c(2014, 2020, 2023))|>
+  group_by(month, year) |>
+  summarise(total_weight_tons = sum(weight_tons), sum_volume_cubic_yards = sum(volume_cubic_yards), cigarette_butts = sum(cigarette_butts), plastic_bottles = sum(plastic_bottles), glass_bottles = sum(glass_bottles), wrappers = sum(wrappers), sports_balls = sum(sports_balls))
+```
+
+```{r}
+#Gonna make it a new data set just in case! Using Chat GPT to find the "case_when" arguement to learn how to change to numerical value starting with 4 to 12. Instead of replacing the column, I will make a new column called "month_numeric" because I want to keep the original column as well if I want to work with it while graphing.
+TWCD_2 <- TWCD_1 %>%
+  mutate(month_numeric = case_when(
+    month == "April" ~ 4,
+    month == "May" ~ 5,
+    month == "June" ~ 6,
+    month == "July" ~ 7,
+    month == "August" ~ 8,
+    month == "September" ~ 9,
+    month == "October" ~ 10,
+    month == "November" ~ 11,
+    month == "December" ~ 12
+  ))
+#I'm going to make sure that the new column is a numerical value.
+class(TWCD_2$month_numeric)
+```
+
+```{r}
+#I'm also going to repeat the same code above, but for the TWCD_FUTURE data set.
+TWCD_FUTURE <- TWCD_FUTURE %>%
+  mutate(month_numeric = case_when(
+    month == "April" ~ 4,
+    month == "May" ~ 5,
+    month == "June" ~ 6,
+    month == "July" ~ 7,
+    month == "August" ~ 8,
+    month == "September" ~ 9,
+    month == "October" ~ 10,
+    month == "November" ~ 11,
+    month == "December" ~ 12
+  ))
+```
+```{r}
+cor(TWCD_2$month_numeric, TWCD_2$cigarette_butts)
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
 ```
 
 
+```{r}
+#I'd also like to do the same for TWCD_FUTURE
+TWCD_FUTURE$year <- factor(TWCD_FUTURE$year)
+```
 
 ```{r}
 # group trash by year and sum
@@ -54,7 +181,7 @@ trashwheel %>%
   ggplot(aes(x = Year, y = n)) +
   geom_point() +
   geom_text(aes(label = n), vjust = -0.5) +
-  geom_line() +
+  geom_line() + 
   labs(title = "Plastic Bottles by Year",
        x = "Year",
        y = "Total Plastic Bottles")
