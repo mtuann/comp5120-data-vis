@@ -47,11 +47,132 @@ sum_trashwheel <- trashwheel %>%
 
 
 ```{r}
+# show the Volume and Weight by year
+ggplot(sum_trashwheel,
+    aes(x = Year, y = sum_Weight)) + 
+    geom_line(aes(color = "Weight")) + 
+    geom_line(aes(x = Year, y = sum_Volume, color = "Volume")) + 
+    labs(title = "Weight and Volume by Year", x = "Year", y = "Weight and Volume", color = "Type") + 
+    scale_color_manual(values = c("Weight" = "red", "Volume" = "blue")) +
+    theme_minimal()
+```
+```{r}
+# line chart to show the sum of Weight
+ggplot(sum_trashwheel,
+    aes(x = Year, y = sum_Weight)) + 
+    geom_line() + 
+    geom_text(aes(label = sum_Weight), hjust = -0.1, vjust = 0.5, color = "red") +
+    labs(title = "Weight by Year", x = "Year", y = "Weight") + 
+    theme_minimal()
+```
+
+```{r}
+# bar chart to show the sum of Volume
+ggplot(sum_trashwheel,
+    aes(x = Year, y = sum_Volume)) + 
+    geom_bar(stat = "identity", fill = "pink") + # fill = "orange" to change the color of the bar
+    geom_text(aes(label = sum_Volume), hjust = 0.5 , vjust = -1, color = "red", size = 7) +
+    labs(title = "Volume by Year", x = "Year", y = "Volume") + 
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+
+```
+
+```{r}
+# correlation matrix between Weight, Volume
+cor(sum_trashwheel$sum_Weight, sum_trashwheel$sum_Volume)
+```
+
+
+```{r}
+# line chart to show the sum of PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by year, log scale for y axis
+
+ggplot(sum_trashwheel,
+    aes(x = Year)) + 
+    geom_line(aes(x = Year, y = log(sum_PlasticBottles), color = "PlasticBottles")) +
+    geom_line(aes(x = Year, y = log(sum_Polystyrene), color = "Polystyrene")) +
+    geom_line(aes(x = Year, y = log(sum_CigaretteButts), color = "CigaretteButts")) +
+    geom_line(aes(x = Year, y = log(sum_GlassBottles), color = "GlassBottles")) +
+    geom_line(aes(x = Year, y = log(sum_PlasticBags), color = "PlasticBags")) +
+    geom_line(aes(x = Year, y = log(sum_Wrappers), color = "Wrappers")) +
+    geom_line(aes(x = Year, y = log(sum_SportsBalls), color = "SportsBalls")) +
+    geom_line(aes(x = Year, y = log(sum_HomesPowered), color = "HomesPowered")) +
+    labs(title = "PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by Year", x = "Year", y = "Log Scale by Number of Items") +
+    scale_color_manual(values = c("PlasticBottles" = "red", "Polystyrene" = "blue", "CigaretteButts" = "green", "GlassBottles" = "yellow", "PlasticBags" = "purple", "Wrappers" = "orange", "SportsBalls" = "black", "HomesPowered" = "brown")) +
+    theme_minimal()
+```
+
+```{r}
 # show the sum of Weight, Volume for PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by group of (year, month)
 sum_trashwheel_month <- trashwheel %>% 
     group_by(Year, Month) %>% 
     summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+
+trash_month_2018 <- sum_trashwheel_month %>% 
+    filter(Year == 2018)
+# shorten month name, e.g. January -> Jan and sort by month
+trash_month_2018 <- sum_trashwheel_month %>% 
+    filter(Year == 2018) %>%
+    # mutate(Month = factor(substr(Month, 1, 3), levels = month.abb)) %>%
+    # arrange(Month)
+    # change Month from "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" to number 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+    mutate(Month = factor(Month, levels = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"), labels = 1:12)) %>%
+    arrange(Month)
+
+
 ```
+
+```{r}
+# line chart to show the sum of Weight by month in 2018, sorted by month
+# trash_month_2018 <- trash_month_2018 %>% 
+# shorten month name, e.g. January -> Jan
+
+ggplot(trash_month_2018,
+    aes(x = Month, y = sum_Weight)) + 
+    geom_bar(stat = "identity", fill = "pink") +
+    geom_text(aes(label = sum_Weight), hjust = 0.5, vjust = -0.5, color = "red", size = 7) +
+    labs(title = "Weight by Month in 2018", x = "Month", y = "Weight", color = "Type") +    
+    theme_minimal() +
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+
+```
+
+
+
+```{r}
+
+# dual Y axis for Weight and Volume
+ggplot(trash_month_2018, aes(x = Month)) +
+    # geom_path(aes(y = sum_Weight), group = 1, color = "red") +
+    geom_bar(aes(y = sum_Weight), stat = "identity", fill = "red") +
+    geom_path(aes(y = sum_Volume / 5), group = 1, color = "blue", size = 3) +
+    geom_text(aes(y = sum_Weight, label = sum_Weight), hjust = 0.5, vjust = -0.5, color = "red", size = 7) +
+    # geom_text(aes(y = sum_Volume / 5, label = sum_Volume), hjust = 0.5, vjust = -0.5, color = "blue", size = 7) +
+    scale_y_continuous(
+        name = "Weight",
+        sec.axis = sec_axis(~ . * 5, name = "Volume")
+    ) +
+    labs(title = "Weight and Volume by Month in 2018", x = "Month", y = "Weight") +
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    ) 
+    # + 
+    # scale_fill_manual(values = c("red", "blue"), labels = c("Weight", "Volume (Scaled)"), name = "")  # Add legend for fill and color
+
+
+```
+
+
 ```{r}
 # show the sum of Weight, Volume for PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, HomesPowered by group of (year, quarter)
 # the month in text "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" converted to quarter "Q1", "Q2", "Q3", "Q4"
@@ -61,6 +182,154 @@ trashwheel <- trashwheel %>%
 sum_trashwheel_quarter <- trashwheel %>% 
     group_by(Year, quarter) %>%
     summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+```
+
+```{r}
+# check number of rows by Year
+# sum_trashwheel_month <- trashwheel %>% 
+#     group_by(Year, Month) %>% 
+#     summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+
+# sum_trashwheel_month %>% 
+#     group_by(Year) %>% 
+#     summarise(n = n())
+# year_list: [2015, 2016, 2018, 2020, 2021, 2022]
+# only select data in year_list
+year_list <- c(2015, 2016, 2018, 2020, 2021, 2022)
+
+sec_year_trashwheel <- trashwheel %>% 
+    filter(Year %in% year_list)
+
+trashwheel_quater <- sec_year_trashwheel %>% 
+    mutate(quarter = ifelse(Month %in% c("January", "February", "March"), "Q1", ifelse(Month %in% c("April", "May", "June"), "Q2", ifelse(Month %in% c("July", "August", "September"), "Q3", "Q4"))))
+
+sum_trashwheel_quarter <- trashwheel_quater %>% 
+    group_by(Year, quarter) %>%
+    summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered))
+
+```
+
+```{r}
+# show PlasticBottles by year and quarter
+ggplot(sum_trashwheel_quarter, aes (x = Year, y = sum_PlasticBottles, fill = quarter)) +
+    geom_col(position = "dodge") +
+    labs(title = "PlasticBottles by Year and Quarter", x = "Year", y = "PlasticBottles", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    ) +
+    coord_flip() 
+```
+
+
+```{r}
+# show Weight by year and quarter
+ggplot(sum_trashwheel_quarter, aes (x = Year, y = sum_Weight, fill = quarter)) +
+    geom_col(position = "dodge") +
+    labs(title = "Weight by Year and Quarter", x = "Year", y = "Weight", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    ) +
+    coord_flip()
+```
+
+```{r}
+# show Volume by year and quarter
+ggplot(sum_trashwheel_quarter, aes (x = Year, y = sum_Volume, fill = quarter)) +
+    geom_col(position = "dodge") +
+    labs(title = "Volume by Year and Quarter", x = "Year", y = "Volume", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    ) +
+    coord_flip()
+```
+
+```{r}
+# show the heatmap of different types of trash by year and quarter
+data_2015 = sum_trashwheel_quarter %>% 
+    filter(Year == 2015) %>%
+    select(-Year, -quarter) %>%
+    cor()
+# remove NA values in the correlation matrix
+data_2015[is.na(data_2015)] <- 0
+
+heatmap(data_2015, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none")
+```
+
+```{r}
+# violin plot to show the distribution of Weight by quarter
+ggplot(trashwheel_quater, aes(x = quarter, y = Weight, fill = quarter)) +
+    geom_violin() +
+    labs(title = "Distribution of Weight by Quarter", x = "Quarter", y = "Weight", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+```
+
+```{r}
+# violin plot to show the distribution of Volume by quarter
+ggplot(trashwheel_quater, aes(x = quarter, y = Volume, fill = quarter)) +
+    geom_violin() +
+    labs(title = "Distribution of Volume by Quarter", x = "Quarter", y = "Volume", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+``` 
+
+
+```{r}
+# violin plot to show the distribution of PlasticBottles by quarter
+ggplot(trashwheel_quater, aes(x = quarter, y = PlasticBottles, fill = quarter)) +
+    geom_violin() +
+    labs(title = "Distribution of PlasticBottles by Quarter", x = "Quarter", y = "PlasticBottles", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+```
+
+
+
+```{r}
+# box plot to show the distribution of Weight by quarter
+ggplot(trashwheel_quater, aes(x = quarter, y = Weight, fill = quarter)) +
+    geom_boxplot() +
+    labs(title = "Distribution of Weight by Quarter", x = "Quarter", y = "Weight", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
+```
+
+```{r}
+# scatter plot to show the relationship between plastic bottles and plastic bags
+ggplot(trashwheel, aes(x = PlasticBottles, y = PlasticBags)) +
+    geom_point() +
+    labs(title = "Scatter plot of PlasticBottles and PlasticBags", x = "PlasticBottles", y = "PlasticBags", color = "Type") +
+    theme_minimal() + 
+    theme(
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 25, face = "bold"),
+        plot.title = element_text(size = 30, face = "bold")
+    )
 ```
 
 ```{r}
@@ -78,6 +347,16 @@ ggplot(sum_trashwheel,
 
 
 ```{r}
+# plot weight and volume by year and month
+ggplot(sum_trashwheel_month, 
+    aes(x = Year, y = sum_Weight)) + 
+    geom_line(aes(color = "Weight")) + 
+
+    geom_line(aes(x = Year, y = sum_Volume, color = "Volume")) + 
+
+    labs(title = "Weight and Volume by Year and Month", x = "Year", y = "Weight and Volume", color = "Type") + 
+    scale_color_manual(values = c("Weight" = "red", "Volume" = "blue")) +
+    theme_minimal()
 ```
 
 
