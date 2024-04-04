@@ -11,7 +11,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction
+# INTRODUCTION
 
 The dataset from the Mr. Trash Wheel Baltimore Healthy Harbor initiative plays a crucial role in combating environmental degradation by removing trash from waterways. This initiative underscores the paramount importance of environmental conservation. However, working with this dataset may present challenges like data inconsistencies or gaps, requiring meticulous preprocessing and analytical methodologies for accurate insights. The dataset contains diverse data attributes such as trash weight, volume, and specific item counts like plastic bottles and cigarette butts, offering a rich landscape for exploration and visualization. Techniques like line charts, bar charts, and box plots enable temporal and comparative analyses, identifying trends, seasonal variations, and disparities in Trash Wheel. Additionally, the unique attribute "HomesPowered" highlights the potential renewable energy benefits of waste management efforts, reinforcing the significance of recycling and resource recovery in environmental sustainability endeavors. Overall, this dataset offers an invaluable opportunity to explore environmental issues through data visualization, fostering a deeper understanding of the complex dynamics between human activity and environmental well-being. Our group employs two questions and various charts, including bar charts, line charts, and box plots, to interpret the data's significance.
 
