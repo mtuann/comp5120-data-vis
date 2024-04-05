@@ -2,6 +2,7 @@
 title: "PROJECT 01 REPORT: Trash Wheel Collection Data"
 author: "Vo Diep Nhu, Vo Phi Son, Nguyen Minh Tuan"
 date: "2024-03-30"
+url: "https://github.com/mtuann/comp5120-data-vis/tree/main/project01"
 output: pdf_document
 ---
 
@@ -15,15 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The dataset from the Mr. Trash Wheel Baltimore Healthy Harbor initiative plays a crucial role in combating environmental degradation by removing trash from waterways. This initiative underscores the paramount importance of environmental conservation. However, working with this dataset may present challenges like data inconsistencies or gaps, requiring meticulous preprocessing and analytical methodologies for accurate insights. The dataset contains diverse data attributes such as trash weight, volume, and specific item counts like plastic bottles and cigarette butts, offering a rich landscape for exploration and visualization. Techniques like line charts, bar charts, and box plots enable temporal and comparative analyses, identifying trends, seasonal variations, and disparities in Trash Wheel. Additionally, the unique attribute "HomesPowered" highlights the potential renewable energy benefits of waste management efforts, reinforcing the significance of recycling and resource recovery in environmental sustainability endeavors. Overall, this dataset offers an invaluable opportunity to explore environmental issues through data visualization, fostering a deeper understanding of the complex dynamics between human activity and environmental well-being. Our group employs two questions and various charts, including bar charts, line charts, and box plots, to interpret the data's significance.
 
-<!-- The dataset originating from the Mr. Trash Wheel Baltimore Healthy Harbor initiative embodies a significant real-world impact in combating environmental degradation by removing trash from waterways. 
-This initiative is pivotal in addressing pressing environmental concerns, emphasizing the paramount importance of environmental conservation. 
-However, working with this dataset may pose certain challenges, such as data inconsistencies or gaps, necessitating meticulous preprocessing and analytical methodologies to derive meaningful insights accurately. 
-Within this dataset lie multifaceted dimensions of data, including trash weight, volume, and specific item counts like plastic bottles and cigarette butts. 
-Such diverse data attributes offer a rich landscape for exploration and visualization, enabling comprehensive analyses of trash accumulation and composition. 
-Through techniques such as line charts, bar charts, and box plots, temporal and comparative analyses become feasible, facilitating the identification of trends, seasonal variations, and disparities among different Trash Wheels. 
-Moreover, the dataset's unique attribute, "HomesPowered," underscores the potential renewable energy benefits of waste management efforts, thereby reinforcing the significance of recycling and resource recovery in environmental sustainability endeavors. 
-Overall, this dataset presents an invaluable opportunity to delve into environmental issues through the lens of data visualization, fostering a deeper understanding of the intricate dynamics between human activity and environmental well-being. 
-Our group employs two questions to analyze the data, alongside various charts including bar charts, line charts, and box plots, to interpret the significance of the data.  -->
+The code and report for the project are available on the GitHub repository: [project01](https://github.com/mtuann/comp5120-data-vis/tree/main/project01).
 
 # Question 1
 How does the composition of collected trash in the Trash Wheel vary over time (Month and Year)? 
@@ -31,16 +24,6 @@ How does the composition of collected trash in the Trash Wheel vary over time (M
 ## Perspective
 Understanding the composition of collected trash over time (Month and Year) is pivotal for comprehensively addressing environmental concerns. This analysis aims to explore the relationship between the quantities of plastic bottles, polystyrene items, and glass bottles collected in various months and years, seeking to uncover patterns and variations in waste composition. To address this question, essential components of the dataset include the quantities of plastic bottles, polystyrene items, and glass bottles collected, and the temporal attributes of Month and Year, enabling us to track the distribution and fluctuations of different types of waste over time. This question is of significant interest due to its direct relevance to environmental sustainability and waste management practices, as understanding how the composition of collected trash provides valuable insights into the sources and distribution of pollutants in water bodies. Moreover, uncovering trends and patterns in waste composition can inform targeted interventions and policy initiatives aimed at mitigating pollution and promoting ecosystem health, contributing meaningfully to ongoing efforts towards environmental conservation and sustainable waste management.
 
-<!-- Understanding the composition of collected trash over time (Month and Year) is pivotal for comprehensively addressing environmental concerns. 
-This analysis aims to explore the relationship between the quantities of plastic bottles, polystyrene items, and glass bottles collected by each Trash Wheel in various months and years.
-By delving into this inquiry, we seek to uncover patterns and variations in waste composition, which can offer crucial insights into the effectiveness of waste management strategies and environmental conservation efforts.
-To address this question, essential components of the dataset include information regarding the Trash Wheel identifiers (ID), the quantities of plastic bottles, polystyrene items, and glass bottles collected, and the temporal attributes of Month and Year.
-These elements enable us to track the distribution and fluctuations of different types of waste over time.
-
-This question is of significant interest due to its direct relevance to environmental sustainability and waste management practices.
-Understanding how the composition of collected trash provides valuable insights into the sources and distribution of pollutants in water bodies.
-Moreover, uncovering trends and patterns in waste composition can inform targeted interventions and policy initiatives aimed at mitigating pollution and promoting ecosystem health.
-Therefore, this analysis holds the potential to contribute meaningfully to the ongoing efforts towards environmental conservation and sustainable waste management.  -->
 
 ## Approach
 To address our question, we will employ a variety of plot types to glean insights into the composition and trends of collected waste over time. Initially, we will undertake two steps: preprocessing the data to create new columns tailored to address our inquiry and utilizing line charts and bar charts to elucidate temporal trends of waste types by month and year.
@@ -51,16 +34,6 @@ Furthermore, additional plots such as stacked area plots will compare the compos
 
 Lastly, we will investigate the trend of weight and volume of collected waste specifically in the year 2018, utilizing a combination of a line chart and a bar chart. This approach will provide a holistic view of waste trends in 2018, leveraging the strengths of both chart types to depict variations in weight and volume across different months. By employing a diverse range of plot types, we aim to uncover nuanced insights into the dynamics of collected waste over time, facilitating informed decision-making and environmental management strategies.
 
-<!-- To address our question, we will employ a variety of plot types to glean insights into the composition and trends of collected waste over time. Initially, we will undertake two steps. In the first step, we will preprocess the data, creating new columns tailored to directly address our inquiry. Subsequently, in the second step, we will utilize line charts and bar charts to elucidate the temporal trends of waste types by month and year.
-
-Firstly, we will employ a line chart to illustrate the temporal trends of weight and volume of collected waste across different years. The line chart is an ideal choice for showcasing continuous trends over time, allowing us to observe fluctuations and patterns in waste quantities throughout the years. By visually representing the changes in weight and volume over time, we can discern any significant peaks, valleys, or overall trends in waste accumulation.
-
-Furthermore, we will create additional plots such as stacked area plots to compare the composition of collected trash among different Trash Wheels by months. Stacked area plots effectively convey the cumulative composition of waste types over time, enabling easy comparison of proportions among different categories within each month. Additionally, to provide a comprehensive understanding of waste distribution, we will employ a relative frequency bar chart encoded with color mapping. This chart will display the percentage of each waste type over the months, allowing us to identify any shifts in waste composition over time.
-
-Lastly, we will investigate the trend of weight and volume of collected waste specifically in the year 2018.
-For this purpose, we will utilize a combination of line chart and bar chart.
-This approach will provide a holistic view of waste trends in 2018, leveraging the strengths of both chart types to depict variations in weight and volume across different months.
-By employing a diverse range of plot types, we aim to uncover nuanced insights into the dynamics of collected waste over time, facilitating informed decision-making and environmental management strategies.  -->
 
 ## Analysis
 To answer the question 1, the two following steps are taken:
@@ -91,7 +64,6 @@ nrow(trashwheel)
 unique(trashwheel$Name)
 ```
 
-<!-- Some data at the HomesPowered column is missed so we add the missing information by using the formulate: $HomePowered=\frac{Weight\ *\ 500}{30}$ -->
 
 We want to investigate the trend of weight (in tons) and volume (in cubic yards) of wastes which were collected during the year from 2014 to 2022. 
 Then, we sum the weight and volume of the wastes with grouping by year.
@@ -267,17 +239,11 @@ The investigation into seasonal trash accumulation patterns, including weight, v
 
 Understanding seasonal trash dynamics is vital for environmental stewardship and sustainable waste management. Exploring weight, volume, and plastic bag counts over different timeframes helps discern temporal trends and the influence of seasons on waste generation. Insights from this analysis can inform interventions and policies to mitigate environmental impacts, promoting healthier and more sustainable communities and ecosystems.
 
-<!-- The investigation into the seasonal pattern of trash accumulation in terms of weight, volume, and the number of plastic bags arises from a critical need to comprehend the dynamic nature of waste management practices across different temporal scales. Central to this inquiry are several key variables within the dataset, namely Month, Year, Weight, Volume, and the count of PlasticBags. These variables serve as indispensable components for unraveling the intricate relationship between seasonal fluctuations and trash collection trends. By scrutinizing variations in these parameters over different months and years, we aim to uncover discernible patterns that shed light on the underlying factors driving trash accumulation.
-
-Understanding the seasonal dynamics of trash accumulation holds significant implications for environmental stewardship and sustainable waste management strategies. The exploration of weight, volume, and plastic bag counts across various timeframes enables us to discern not only the temporal trends in trash accumulation but also the potential influence of seasonal factors on waste generation and disposal patterns. By delving into these nuances, we aspire to glean insights that can inform targeted interventions and policies aimed at mitigating the environmental impact of waste accumulation, thus fostering a healthier and more sustainable future for our communities and ecosystems.  -->
 
 ## Approach
 To unveil seasonal trash accumulation patterns in weight, volume, and plastic bag count, we organize the dataset by quarter and year to streamline analysis, focusing on plastic bottle accumulation trends. Bar charts illustrate temporal plastic bottle trends from 2016 to 2022, revealing any seasonal fluctuations. Extending the analysis to weight and volume, additional bar charts depict dynamics across quarters. These visuals provide a comprehensive overview of trash accumulation trends.
 
 To explore interrelationships between trash types, we analyze potential correlations using a heatmap in 2015. Color mapping represents correlation strength, aiding in identifying significant associations. Additionally, we examine weight distribution across quarters with a box plot, offering insights into variability and central tendency. Through this analytical approach combining bar charts, heat maps, and box plots, we gain a comprehensive understanding of seasonal trash dynamics, including weight, volume, and plastic bag prevalence over time.
-<!-- To unravel the seasonal patterns of trash accumulation in terms of weight, volume, and the number of plastic bags, we adopt a systematic approach employing diverse visualizations tailored to capture distinct facets of the data. Initially, we organize the dataset by quarter and year to streamline our analysis. Our first focus lies on delineating the seasonal trajectory of plastic bottle accumulation. Through the utilization of bar charts, we illustrate the temporal trends in collected plastic bottles across the years from 2016 to 2022. This choice of visualization enables us to discern any discernible seasonal fluctuations or patterns in plastic bottle accumulation over time. Subsequently, we extend our analysis to encompass the weight and volume of collected waste. Leveraging additional bar charts, we portray the temporal dynamics of weight and volume over the quarters spanning from 2016 to 2022. These visualizations offer a comprehensive depiction of the overall trends in trash accumulation over the specified timeframe.
-
-To delve deeper into the interrelationships between different types of trash accumulation, we embark on an exploration of potential correlations. Employing a heatmap visualization, we elucidate the correlation matrix between various types of trash, including plastic bottles, polystyrene items, glass bottles, cigarette butts, wrappers, and sports balls, with a particular focus on the year 2015. By employing color mapping to represent the strength of correlations, this visualization aids in identifying significant associations between different types of trash accumulation. Furthermore, we delve into the distribution of weight of collected waste across quarters utilizing a box plot. This visualization offers insights into the variability and central tendency of weight distribution within each quarter, providing valuable insights into the seasonal patterns of trash accumulation in terms of weight. Through a judicious combination of bar charts, heatmap, and box plot, our analytical approach offers a comprehensive understanding of the seasonal dynamics of trash accumulation, shedding light on weight, volume, and the prevalence of plastic bags over time.  -->
 
 ## Analysis
 Firstly, we want to visualize the seasonal pattern of trash accumulation for Plastic Bottles. Therefore, we create the data.
