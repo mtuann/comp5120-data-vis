@@ -85,6 +85,10 @@ trashwheel <- trashwheel %>%
 # remove the missing (NA) values
 trashwheel <- na.omit(trashwheel)
 
+# len of the data
+nrow(trashwheel)
+# print unique values of the Name
+unique(trashwheel$Name)
 ```
 
 <!-- Some data at the HomesPowered column is missed so we add the missing information by using the formulate: $HomePowered=\frac{Weight\ *\ 500}{30}$ -->
