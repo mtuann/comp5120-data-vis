@@ -1,3 +1,5 @@
 # skip R-studio files
 .DS_Store
 story01/CVPR-2023-Paper-Statistics/
+*/pdf/*
+olympic/Olympic_Shiny
