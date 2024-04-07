@@ -168,6 +168,9 @@ trash_long <- trash_month_all %>%
   na.omit() %>%
   pivot_longer(cols = -Month, names_to = "Waste_Type", values_to = "Relative_Frequency")
 
+# remove "rel_freq_" pattern in Waste_Type column
+trash_long$Waste_Type <- gsub("rel_freq_", "", trash_long$Waste_Type)
+
 # Plot the bar chart
 ggplot(trash_long, aes(x = Relative_Frequency, y = Month, fill = Waste_Type)) +
   geom_col(position = "stack") +
@@ -359,18 +362,53 @@ data_2015 <- sum_trashwheel_quarter %>%
   filter(Year == 2015) %>% 
   group_by(Year) %>%
   select(-quarter) %>%
+  # remove "sum_" pattern in all column names
+  rename_all(~ gsub("sum_", "", .)) %>% 
   cor()
 
 # # remove NA values in the correlation matrix
 # data_2015[is.na(data_2015)] <- 0
 
 # Set the size of the main title and axis labels
-par(cex.main = 0.8, cex.axis = 0.8)
+par(cex.main = 0.8, cex.axis = 0.8, cex.lab = 0.8)
 
-# Plotting heatmap
-heatmap(data_2015, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none",
+# Plotting heatmap with a small font size
+heatmap(data_2015, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
         main = "Fig 8. Heatmap of Different Types of Trash by Year and Quarter (2015)")
+
 ```
+
+```{r}
+# # Prepare the data
+# data_all_year <- sum_trashwheel_quarter %>%
+#   group_by(Year) %>%
+#   select(-quarter) %>%
+#   # Remove "sum_" pattern in all column names
+#   rename_all(~ gsub("sum_", "", .)) %>%
+#   cor() %>%
+#   as.data.frame() %>%
+#   rownames_to_column(var = "Trash_Type")  # Convert row names to a column
+
+# # Set the size of the main title and axis labels
+# theme_set(theme_bw(base_size = 8))  # Adjust the base font size
+
+# # Plotting heatmap with facet_wrap
+# ggplot(data_all_year, aes(x = Trash_Type, y = Trash_Type, fill = value)) +
+#   # geom_tile() +
+#   scale_fill_gradient(low = "white", high = "blue") +
+#   facet_wrap(~ Year, ncol = 2) +
+#   labs(
+#     title = "Fig 9. Heatmap of Different Types of Trash by Year",
+#     x = NULL, y = NULL,
+#     fill = "Correlation"
+#   ) +
+#   theme(
+#     plot.title = element_text(hjust = 0.5),
+#     strip.text = element_text(size = 8, face = "bold")
+#   )
+
+```
+
 
 ### Discussion 04
 
