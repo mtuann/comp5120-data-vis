@@ -44,7 +44,6 @@ trashwheel <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 
 7. Learning Opportunity: Working with this dataset provides an opportunity to apply data visualization techniques in a meaningful context, fostering a deeper understanding of environmental issues and the role of data in addressing them.
 
-8. Environmental Awareness: Visualizing data related to plastic bottles, polystyrene items, cigarette butts, and other waste materials can raise awareness about the types of pollutants present in water bodies. This can be instrumental in advocating for policies and initiatives aimed at reducing plastic pollution and promoting environmental sustainability.
 ## Research question and involved varaialbes
 ### Question 1:
 How does the composition of collected trash vary across different Trash Wheels (ID) over time (Month and Year)? Specifically, I will explore the relationship between the number of plastic bottles, polystyrene items, and glass bottles collected by each Trash Wheel in different months and years.
