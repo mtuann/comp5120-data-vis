@@ -356,63 +356,46 @@ The Fig 7 shows that the trend of volume of collected waste decreases sharply ov
 # cat("Spearman's rank correlation coefficient between x and y:", correlation)
 
 ```
-```{r}
-# show the heatmap of different types of trash by year and quarter
-data_2015 <- sum_trashwheel_quarter %>% 
-  filter(Year == 2015) %>% 
-  group_by(Year) %>%
-  select(-quarter) %>%
-  # remove "sum_" pattern in all column names
-  rename_all(~ gsub("sum_", "", .)) %>% 
-  cor()
-
-# # remove NA values in the correlation matrix
-# data_2015[is.na(data_2015)] <- 0
-
-# Set the size of the main title and axis labels
-par(cex.main = 0.8, cex.axis = 0.8, cex.lab = 0.8)
-
-# Plotting heatmap with a small font size
-heatmap(data_2015, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
-        main = "Fig 8. Heatmap of Different Types of Trash by Year and Quarter (2015)")
-
-```
 
 ```{r}
-# # Prepare the data
-# data_all_year <- sum_trashwheel_quarter %>%
-#   group_by(Year) %>%
-#   select(-quarter) %>%
-#   # Remove "sum_" pattern in all column names
-#   rename_all(~ gsub("sum_", "", .)) %>%
-#   cor() %>%
-#   as.data.frame() %>%
-#   rownames_to_column(var = "Trash_Type")  # Convert row names to a column
+
+data_cor <- trashwheel_quater %>% 
+    group_by(Year) %>%
+    select(-quarter, -Year) %>% 
+    summarise(sum_Weight = sum(Weight), sum_Volume = sum(Volume), sum_PlasticBottles = sum(PlasticBottles), sum_Polystyrene = sum(Polystyrene), sum_CigaretteButts = sum(CigaretteButts), sum_GlassBottles = sum(GlassBottles), sum_PlasticBags = sum(PlasticBags), sum_Wrappers = sum(Wrappers), sum_SportsBalls = sum(SportsBalls), sum_HomesPowered = sum(HomesPowered)) %>%
+    rename_all(~ gsub("sum_", "", .)) %>% 
+    cor()
+
+# # Plotting heatmap with a small font size
+heatmap(data_cor, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
+        main = "Fig 8. Heatmap of Different Types of Trash")
+
+# Define colors from blue to white to red
+# colors <- c("blue", "white", "red")
+
+# Generate color palette based on the correlation range
+# legend_colors <- colorRampPalette(colors)(256)
+
+# Plot heatmap
+# heatmap(data_cor, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
+        # main = "Fig 8. Heatmap of Different Types of Trash")
+
+# Add color legend manually
+# legend("topright", legend = seq(-1, 1, by = 0.2), fill = legend_colors, title = "Correlation", cex = 0.8)
 
 # # Set the size of the main title and axis labels
-# theme_set(theme_bw(base_size = 8))  # Adjust the base font size
+# par(cex.main = 0.8, cex.axis = 0.8, cex.lab = 0.8)
 
-# # Plotting heatmap with facet_wrap
-# ggplot(data_all_year, aes(x = Trash_Type, y = Trash_Type, fill = value)) +
-#   # geom_tile() +
-#   scale_fill_gradient(low = "white", high = "blue") +
-#   facet_wrap(~ Year, ncol = 2) +
-#   labs(
-#     title = "Fig 9. Heatmap of Different Types of Trash by Year",
-#     x = NULL, y = NULL,
-#     fill = "Correlation"
-#   ) +
-#   theme(
-#     plot.title = element_text(hjust = 0.5),
-#     strip.text = element_text(size = 8, face = "bold")
-#   )
 
+# legend("topright", legend = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1), fill = colorRampPalette(c("blue", "white", "red"))(256), title = "Correlation", cex = 0.8)
 ```
 
 
 ### Discussion 04
 
-The Fig 8 shows the correlation between different types of trash accumulation. The correlations between plastic bottles, polystyrene, cigarette butts, and sports balls are very strong, whereas the correlations between other collected waste are weak. Furthermore, strong correlations are observed between weight, volume, plastic bottles, polystyrene, cigarette butts, and homes powered. This suggests that these types of collected waste contribute significantly to power generation, and an increase in weight and volume will result in an increase in homes powered. We also investigate the distribution of weight of collected waste over the quarter by using the box plot.
+<!-- The Fig 8 shows the correlation between different types of trash accumulation. The correlations between plastic bottles, polystyrene, cigarette butts, and sports balls are very strong, whereas the correlations between other collected waste are weak. Furthermore, strong correlations are observed between weight, volume, plastic bottles, polystyrene, cigarette butts, and homes powered. This suggests that these types of collected waste contribute significantly to power generation, and an increase in weight and volume will result in an increase in homes powered. We also investigate the distribution of weight of collected waste over the quarter by using the box plot. -->
+
+The Figure 8 illustrates the correlation between different types of waste summarized by year. The heatmap indicates a strong positive correlation (depicted by red color) among polystyrene, plastic bags, cigarette butts, glass bottles, and wrappers, while the correlation between other types of waste is weak (depicted by white color). Additionally, there is a strong negative correlation (depicted by blue color) between weight, volume, and plastic bottles, sport balls, and homes power, whereas the relationship between wrappers, plastic bags, and homes power is strong (depicted by light red color). This suggests that wrappers and plastic bags are the types of waste that contribute more to creating homes power. Furthermore, weight and volume exhibit a strong positive relationship with home power.
 
 ```{r}
 # box plot to show the distribution of Weight by quarter
