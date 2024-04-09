@@ -367,35 +367,44 @@ data_cor <- trashwheel_quater %>%
     cor()
 
 # # Plotting heatmap with a small font size
-heatmap(data_cor, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
-        main = "Fig 8. Heatmap of Different Types of Trash")
+data_cor_melt <- reshape2::melt(as.matrix(data_cor))
 
-# Define colors from blue to white to red
-# colors <- c("blue", "white", "red")
-
-# Generate color palette based on the correlation range
-# legend_colors <- colorRampPalette(colors)(256)
-
-# Plot heatmap
-# heatmap(data_cor, Rowv = NA, Colv = NA, col = cm.colors(256), scale = "none", cexRow = 0.75, cexCol = 0.75, 
-        # main = "Fig 8. Heatmap of Different Types of Trash")
-
-# Add color legend manually
-# legend("topright", legend = seq(-1, 1, by = 0.2), fill = legend_colors, title = "Correlation", cex = 0.8)
-
-# # Set the size of the main title and axis labels
-# par(cex.main = 0.8, cex.axis = 0.8, cex.lab = 0.8)
-
-
-# legend("topright", legend = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1), fill = colorRampPalette(c("blue", "white", "red"))(256), title = "Correlation", cex = 0.8)
+ggplot(data = data_cor_melt, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                       name="Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title = element_text(face = "bold")) +
+  labs(x = "", y = "", title = "Fig 8. Heatmap of Different Types of Trash") +
+  coord_fixed()
 ```
 
 
 ### Discussion 04
 
-<!-- The Fig 8 shows the correlation between different types of trash accumulation. The correlations between plastic bottles, polystyrene, cigarette butts, and sports balls are very strong, whereas the correlations between other collected waste are weak. Furthermore, strong correlations are observed between weight, volume, plastic bottles, polystyrene, cigarette butts, and homes powered. This suggests that these types of collected waste contribute significantly to power generation, and an increase in weight and volume will result in an increase in homes powered. We also investigate the distribution of weight of collected waste over the quarter by using the box plot. -->
+The Figure 8 illustrates the correlation between different types of waste summarized by year. Here are some observations:
 
-The Figure 8 illustrates the correlation between different types of waste summarized by year. The heatmap indicates a strong positive correlation (depicted by red color) among polystyrene, plastic bags, cigarette butts, glass bottles, and wrappers, while the correlation between other types of waste is weak (depicted by white color). Additionally, there is a strong negative correlation (depicted by blue color) between weight, volume, and plastic bottles, sport balls, and homes power, whereas the relationship between wrappers, plastic bags, and homes power is strong (depicted by light red color). This suggests that wrappers and plastic bags are the types of waste that contribute more to creating homes power. Furthermore, weight and volume exhibit a strong positive relationship with home power.
+- **Strong Positive Correlations:**
+  - There are strong positive correlations between:
+    - Plastic Bottles and Polystyrene (0.659)
+    - Polystyrene and Cigarette Butts (0.881)
+    - Cigarette Butts and Glass Bottles (0.950)
+    - Glass Bottles and Plastic Bags (0.809)
+    - Plastic Bags and Wrappers (0.965)
+  - This suggests a possible link between these factors. For example, areas with high levels of plastic bottles might also have high levels of polystyrene and cigarette butts, indicating potential littering issues.
+
+- **Strong Negative Correlations:**
+  - There's a strong negative correlation between Year and several waste factors (around -0.9). 
+  - This might indicate a decrease in these factors over the year (e.g., recycling initiatives or reduced waste generation).
+
+- **Weaker Correlations:**
+  - The correlation between Year and other factors like Weight, Volume, SportsBalls, and HomesPowered is weaker (between -0.3 and 0.3). 
+
+- **Year and HomesPowered:**
+  - The positive correlation between Year and HomesPowered (0.267) is interesting. It's unclear if this suggests an increase in homes powered by waste-to-energy or other renewable sources over time, or if it's due to other factors.
 
 ```{r}
 # box plot to show the distribution of Weight by quarter
