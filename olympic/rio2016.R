@@ -4,6 +4,7 @@ library(ggplot2)
 library(readr)
 library(reshape2)
 library(DT)
+library(tidyverse)
 
 # Define UI for application
 ui <- fluidPage(
@@ -13,8 +14,8 @@ ui <- fluidPage(
     sidebarPanel(
       # Add any inputs here if needed
         selectInput("game_season", "Game Season", choices = c("Summer", "Winter"), selected = "Summer"),
-        selectInput("participant_type", "Participant Type", choices = c("Athlete", "Official", "Team Official", "Coach", "Media", "Other", "Technical Official"), selected = "Athlete"),
-        selectInput("year", "Year", choices = c(1896:2022), selected = 2016)
+        # selectInput("participant_type", "Participant Type", choices = c("Athlete", "Official", "Team Official", "Coach", "Media", "Other", "Technical Official"), selected = "Athlete"),
+        # selectInput("year", "Year", choices = c(1896:2022), selected = 2016)
     ),
     
     mainPanel(
@@ -36,7 +37,9 @@ ui <- fluidPage(
                    column(6, plotOutput("medalstat4", height = "500px"))
                  )
         ),
-        tabPanel("Empty Panel 4", plotOutput("emptyPlot4", height = "1000px"))
+        tabPanel("Medal by Countries", DTOutput("medalplot4")),
+        tabPanel("Top 20 Individual Participants", DTOutput("emptyPlot3")),
+        tabPanel("GameTeam Discipline", DTOutput("emptyPlot4")),
       )
     )
   )
@@ -46,7 +49,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # Load data
-  df <- read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data_medal_cleaned.csv")
+  df <- read_csv("https://raw.githubusercontent.com/mtuann/comp5120-data-vis/main/olympic/data_medal_cleaned.csv")
   
   observe({
     
@@ -123,6 +126,22 @@ server <- function(input, output) {
         )
       })
       
+
+      # filter data by country (participant_title)
+      medals_by_country <- df_filtered %>%
+        group_by(medal_type, country_name, country_3_letter_code) %>%
+        summarise(count = n(), .groups = "drop")
+      # sort by count descending
+      medals_by_country <- medals_by_country[order(-medals_by_country$count),]
+        # Table
+        output$medalplot4 <- renderDT({
+          datatable(medals_by_country, 
+                    options = list(
+                      searching = TRUE,
+                      pageLength = 20
+                    )
+          )
+        })
       
       # Medals awarded by sport
       medals_by_sport <- df_filtered %>%
@@ -185,17 +204,52 @@ server <- function(input, output) {
         # Plot
         plot_small
       })
+
+      # Top 20 participants with the most medals
+      # remove NA values of athlete_full_name column
+      df_athlete <- df_filtered[!is.na(df_filtered$athlete_full_name),]
+      # group by athlete_full_name and count the number of medals
+      top_participants <- df_athlete %>%
+        group_by(athlete_full_name, country_name, discipline_title) %>%
+        summarise(count = n(), .groups = "drop") %>%
+        top_n(20, count) %>%
+        arrange(desc(count))
+    
+      # Table
+      output$emptyPlot3 <- renderDT({
+        datatable(top_participants, 
+                  options = list(
+                    searching = TRUE,
+                    pageLength = 20
+                  )
+        )
+      })
+
+      # select only game_team (participant_type = "GameTeam") and group by game_name and country_name
+    df_gameteam <- df_filtered[df_filtered$participant_type == "GameTeam",]
+    top_participants_team <- df_gameteam %>%
+      group_by(game_name, country_name, medal_type, discipline_title) %>%
+      summarise(count = n(), .groups = "drop") %>%
+      top_n(100, count) %>%
+      arrange(desc(count))
+
+            # Table
+      output$emptyPlot4 <- renderDT({
+        datatable(top_participants_team, 
+                  options = list(
+                    searching = TRUE,
+                    pageLength = 20
+                  )
+        )
+      })
+
+
       
   })
- 
-  
-
-
 
   
-  output$emptyPlot3 <- renderPlot({
-    plot(1, type = "n", xlab = "", ylab = "", axes = FALSE)
-  })
+
+
   
   output$emptyPlot4 <- renderPlot({
     plot(1, type = "n", xlab = "", ylab = "", axes = FALSE)

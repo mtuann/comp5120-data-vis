@@ -3,7 +3,15 @@ library(tidyverse)
 ```
 
 ```{r}
-install.packages("ghp")
+install.packages('rsconnect')
+```
+
+```{r}
+rsconnect::setAccountInfo(name='mtuann',
+			  token='68896A8047548E90ED532176B8CD1FD7',
+			  secret='lEyCzreJeTG+fheHrFj9cXEqlS8/PB8h/TdujamM')
+library(rsconnect)
+  rsconnect::deployApp('mtuann')
 ```
 
 ```{r}
@@ -303,18 +311,106 @@ plot_small <- ggplot(medals_by_sport_small, aes(x = reorder(discipline_title, -c
 ```
 
 ```{r}
-plot_large
+# filter data by country (participant_title)
+medals_by_country <- df %>%
+  group_by(medal_type, country_name, country_3_letter_code) %>%
+  summarise(count = n(), .groups = "drop")
+# sort by count descending
+medals_by_country <- medals_by_country[order(-medals_by_country$count),]
+
+# split by 3 groups: gold, silver, bronze
+# each group will be displayed in circle bubble chart
+medals_by_country_gold <- medals_by_country %>%
+  filter(medal_type == "GOLD")
+medals_by_country_silver <- medals_by_country %>%
+  filter(medal_type == "SILVER")
+medals_by_country_bronze <- medals_by_country %>%
+  filter(medal_type == "BRONZE")
+
+
+```
+```{r}
+# Create bubble chart in a 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+# filter data by "Vietnam"
+medals_by_country_vn <- medals_by_country %>%
+  filter(country_name == "Vietnam")
 ```
 
 
 ```{r}
-plot_small
+# Bubble chart
+ggplot(medals_by_country_gold, aes(x = country_name, y = count, size = count, fill = country_name)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  scale_size_continuous(range = c(3, 15)) +
+  labs(title = "Gold Medal Count by Country",
+       x = "Country",
+       y = "Gold Medal Count",
+       size = "Gold Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+install.packages("packcircles")
+library(packcircles)
+library(ggplot2)
+
+p <- circleProgressiveLayout(runif(26))
+d <- circleLayoutVertices(p)
+
+ggplot(d, aes(x, y)) + 
+  geom_polygon(aes(group = id, fill = id), 
+               colour = "black", show.legend = FALSE) +
+  geom_text(data = p, aes(x, y), label = LETTERS) +
+  scale_fill_distiller(palette = "RdGy") +
+  theme_void()
+```
+
+```{r}
+# Calculate circle positions and sizes
+circle_positions <- circleProgressiveLayout(medals_by_country_gold$count)
+circle_sizes <- sqrt(medals_by_country_gold$count / pi)
+
+# Create circle layout vertices
+circle_layout <- circleLayoutVertices(circle_positions)
+
+# Combine data into a data frame
+circle_df <- data.frame(circle_layout, size = circle_sizes, country = medals_by_country_gold$country_name)
+
+# Plot the bubble chart using geom_polygon
+ggplot(circle_df, aes(x, y)) + 
+  geom_polygon(aes(group = id, fill = country, size = size), colour = "black", show.legend = FALSE) +
+  geom_text(data = circle_positions, aes(label = medals_by_country_gold$country_name), size = 5) +
+  scale_fill_manual(values = rainbow(nrow(medals_by_country_gold))) +
+  theme_void() +
+  labs(title = "Bubble Chart of Gold Medals by Country") +
+  guides(size = "none")  # Hide the legend for bubble sizes
+
 ```
 
 
 ```{r}
+# Top 20 participants with the most medals
+# remove NA values of athlete_full_name column
+df_athlete <- df[!is.na(df$athlete_full_name),]
+# group by athlete_full_name and count the number of medals
+top_participants <- df_athlete %>%
+  group_by(athlete_full_name, country_name, discipline_title) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  top_n(20, count) %>%
+  arrange(desc(count))
 ```
 
-
 ```{r}
+# select only game_team (participant_type = "GameTeam") and group by game_name and country_name
+df_gameteam <- df[df$participant_type == "GameTeam",]
+top_participants_team <- df_gameteam %>%
+  group_by(game_name, country_name, medal_type, discipline_title) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  top_n(100, count) %>%
+  arrange(desc(count))
 ```
