@@ -1,0 +1,364 @@
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+# define a array of file
+files <- list.files(path = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data", pattern = "*.csv", full.names = TRUE)
+View(files)
+```
+
+```{r}
+olympic_athletes = read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data/olympic_athletes.csv")
+olympic_hosts = read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data/olympic_hosts.csv")
+olympic_medals = read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data/olympic_medals.csv")
+olympic_results = read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data/olympic_results.csv")
+```
+
+```{r}
+olympic_data = read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data_medal_cleaned.csv")
+```
+
+```{r}
+# View(olympic_hosts)
+df <- read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data_medal_cleaned.csv")
+# Filter rows based on game_season
+df <- subset(df, game_season == 'Summer')
+
+# Group by discipline_title and game_year, and count participant_type
+df_disciplines_year <- aggregate(participant_type ~ discipline_title + game_year, data = df, FUN = length)
+
+# Pivot the dataframe
+df_heatmap <- reshape(df_disciplines_year, idvar = "discipline_title", timevar = "game_year", direction = "wide")
+
+# Remove "participant_type." from column names
+names(df_heatmap) <- gsub("participant_type.", "", names(df_heatmap))
+
+df_heatmap[is.na(df_heatmap)] <- 0
+# change the value of df_heatmap to binary value except the first column
+df_heatmap[,-1] <- ifelse(df_heatmap[,-1] > 0, 1, 0)
+
+# sort df_heatmap descending by sum of each row (except the first column)   
+# df_heatmap <- df_heatmap[order(-rowSums(df_heatmap[,-1])),]
+
+# convert back to data as df_disciplines_year
+df_disciplines_year2 <- melt(df_heatmap, id.vars = "discipline_title", variable.name = "game_year", value.name = "participant_type")
+
+df_disciplines_year2$discipline_title <- factor(df_disciplines_year2$discipline_title, levels = df_disciplines_year2$discipline_title[order(rowSums(df_heatmap[,-1]), decreasing = FALSE)])
+ggplot(df_disciplines_year2, aes(x = game_year, y = discipline_title, fill = factor(participant_type))) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "red"), labels = c("NO", "YES"), name = "HELD") +
+  theme_minimal() +
+  labs(title = "Binary Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+            axis.text.y = element_text(size = 10),
+            plot.title = element_text(size = 18, hjust = 0.5),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.line = element_line(color = "black"),
+            legend.title = element_text(size = 12),
+            legend.text = element_text(size = 10),
+            plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+
+```{r}
+# sort the y axis by the sum of each row
+df_disciplines_year2$discipline_title <- factor(df_disciplines_year2$discipline_title, levels = df_disciplines_year2$discipline_title[order(rowSums(df_heatmap[,-1]), decreasing = FALSE)])
+ggplot(df_disciplines_year2, aes(x = game_year, y = discipline_title, fill = factor(participant_type))) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "red"), labels = c("NO", "YES"), name = "HELD") +
+  theme_minimal() +
+  labs(title = "Binary Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+            axis.text.y = element_text(size = 10),
+            plot.title = element_text(size = 18, hjust = 0.5),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.line = element_line(color = "black"),
+            legend.title = element_text(size = 12),
+            legend.text = element_text(size = 10),
+            plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+```{r}
+# convert to binary data
+# df_disciplines_year2$participant_type <- ifelse(df_disciplines_year2$participant_type > 0, 1, 0)
+
+# Plot heatmap
+# ggplot(df_disciplines_year2, aes(x = game_year, y = discipline_title, fill = participant_type))
+
+ggplot(df, aes(x = game_year, y = discipline_title, fill = factor(participant_type))) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "black")) +
+  theme_minimal() +
+  labs(title = "Binary Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports")
+
+# # Transform counts into binary values
+# df_heatmap[df_heatmap > 0] <- 1
+
+# # # Extract column names and the last column
+# column_list <- colnames(df_heatmap)
+# column_last <- tail(column_list, 1)
+
+# # # Filter disciplines with participants in the last year
+# disciplines_current <- df_heatmap[df_heatmap[, column_last] == 1, ]
+# disciplines_current_not <- df_heatmap[df_heatmap[, column_last] != 1, ]
+
+# # # Sort disciplines
+# # disciplines_current <- disciplines_current[order(disciplines_current[, column_last]), ]
+# # disciplines_current_not <- disciplines_current_not[order(disciplines_current_not[, column_last]), ]
+
+# # # Concatenate dataframes
+# df_heatmap <- rbind(disciplines_current, disciplines_current_not)
+
+# # # Rename columns
+# colnames(df_heatmap) <- gsub("\\d{4}$", "\n\\0", column_list)
+# # colnames(df_heatmap) <- substr(column_list, nchar(column_list) - 3, nchar(column_list))
+# rownames(df_heatmap) <- gsub(" ", "\n", rownames(df_heatmap), fixed = TRUE)
+
+```
+
+```{r}
+# Plot heatmap
+# if participant_type in df_disciplines_year > 0, then set value to 1 else 0
+new_df <- df_disciplines_year %>%
+  mutate(participant_type = ifelse(participant_type > 0, 1, 0))
+# show binary matrix of df_disciplines_year
+ggplot(new_df, aes(x = game_year, y = discipline_title, fill = participant_type)) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "black")) +
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports")
+  
+#   theme()
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+#         axis.text.y = element_text(size = 10),
+#         plot.title = element_text(size = 18, hjust = 0.5),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.line = element_line(color = "black"),
+#         legend.title = element_text(size = 12),
+#         legend.text = element_text(size = 10),
+#         plot.margin = unit(c(1, 1, 1, 1), "cm"))
+```
+
+```{r}
+ggplot(new_df, aes(x = game_year, y = discipline_title, fill = participant_type)) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "black")) +
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports")
+
+```
+```{r}
+ggplot(df_disciplines_year, aes(x = game_year, y = discipline_title, fill = participant_type)) +
+  geom_tile(color = "black") +
+  scale_fill_gradientn(colors = c("blue", "white", "red"), na.value = "white") +
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 10),
+        plot.title = element_text(size = 18, hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+# ggplot(df_disciplines_year, aes(x = game_year, y = discipline_title, fill = participant_type)) +
+#   geom_tile(color = "black") +
+#   scale_fill_gradientn(colors = c("blue", "white", "red"), na.value = "white") +
+#   theme_minimal() +
+#   labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+#         axis.text.y = element_text(size = 10),
+#         plot.title = element_text(size = 18, hjust = 0.5),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.line = element_line(color = "black"),
+#         legend.title = element_text(size = 12),
+#         legend.text = element_text(size = 10),
+#         plot.margin = unit(c(1, 1, 1, 1), "cm"))
+```
+
+```{r}
+# show heatmap matrix of df_heatmap (matrix only contains 0 and 1)
+ggplot(df_heatmap, aes(x = "", y = "", fill = itle)) +
+  geom_tile(color = "white") +
+  scale_fill_manual(values = c("white", "black")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 12, angle = 90, hjust = 1),
+        axis.text.y = element_text(size = 12),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_blank(),
+        plot.title = element_text(size = 20, hjust = 0.5),
+        legend.position = "none") +
+  labs(title = "Disciplines with participants in the last year")
+
+```
+
+```{r}
+View(olympic_results)
+```
+
+```{r}
+# Generate sample matrix of 0s and 1s
+set.seed(123)
+mat <- matrix(sample(0:1, 100, replace = TRUE), nrow = 10)
+
+# Plot heatmap
+heatmap(mat, Rowv = NA, Colv = NA, col = c("white", "blue"),
+        scale = "none", xlab = "Column", ylab = "Row",
+        main = "Heatmap of Binary Matrix")
+
+```
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+# Sample data
+data <- matrix(rnorm(100), nrow = 10)
+
+# Convert to data frame
+data_df <- melt(data)
+
+# Plot heatmap
+ggplot(data_df, aes(x = Var2, y = Var1, fill = value)) +
+  geom_tile(color = "black") +
+  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = range(data), na.value = "white") +
+  theme_minimal() +
+  labs(title = "Title", x = "", y = "") +
+  theme(axis.text.x = element_text(size = 14), 
+        axis.text.y = element_text(size = 16),
+        axis.ticks = element_blank(),
+        axis.line = element_line(color = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(size = 22, hjust = 0.5),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+# Sample data (replace this with your actual data)
+set.seed(123)
+years <- 2000:2020
+sports <- c("Football", "Basketball", "Tennis", "Swimming")
+data <- matrix(runif(length(years) * length(sports)), nrow = length(years), dimnames = list(years, sports))
+
+# Convert data to long format
+data_df <- melt(data)
+
+# Plot heatmap
+ggplot(data_df, aes(x = Var2, y = Var1, fill = value)) +
+  geom_tile(color = "black") +
+  scale_fill_gradientn(colors = c("blue", "white", "red"), na.value = "white") +
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Type of Sports", y = "Year") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 10),
+        plot.title = element_text(size = 18, hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+# Sample data
+years <- 1990:2020
+sports <- c("Basketball", "Football", "Tennis", "Swimming", "Cycling")
+data <- matrix(runif(125, 0, 1), nrow = length(years), ncol = length(sports))
+colnames(data) <- sports
+rownames(data) <- years
+
+# Convert to data frame
+data_df <- melt(data)
+
+# Plot heatmap
+ggplot(data_df, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "black") +
+  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = range(data), na.value = "white") +
+  theme_minimal() +
+  labs(title = "Sports Participation Over Years", x = "Year", y = "Sports") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        plot.title = element_text(size = 16, hjust = 0.5),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

@@ -5,3 +5,7 @@ story01/CVPR-2023-Paper-Statistics/
 olympic/Olympic_Shiny
 olympic/athlete_events.csv
 olympic/noc_regions.csv
+olympic/data/
+olympic/*.zip
+olympic/Johns_Hopkins_Data_Visualization_and_Dashboarding_With_R/
+olympic/rio2016/
