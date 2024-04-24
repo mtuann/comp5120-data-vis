@@ -33,9 +33,12 @@ The project aims to answer the following research questions:
 
 # Project 02: To be updated
 The projects are done by the group of students:
+- Kieu Hai Dang
 - Vo Diep Nhu
-- Vo Phi Son
 - Nguyen Minh Tuan
+
+The project is about the arXiv Collection Data. 
+The details of the project can be found in file [project2](project02/READMe.md).
 
 
 <!-- The projects are done using the following datasets from [`TidyTuesday`](https://github.com/rfordatascience/tidytuesday) repository:
