@@ -7,9 +7,9 @@
 The ever-growing volume of scientific research published on arXiv presents a challenge in staying abreast of current trends and identifying groundbreaking advancements. Our project aims to address this challenge by creating a suite of data visualizations that unveil hidden patterns and trends within arXiv preprints. By analyzing titles, abstracts, and potentially other metadata (depending on data availability), we can provide researchers with valuable insights into:
 
 - **Emerging research areas:** Identifying rapidly growing topics and potential breakthroughs across different scientific disciplines.
-- **Collaboration patterns:** Visualizing co-authorship networks to understand research communities and collaborations driving innovation.
-- **Author productivity:** Highlighting highly productive researchers and their areas of focus.
 - **Shifting trends:** Tracking changes in research focus over time and identifying potential paradigm shifts within specific fields.
+<!-- - **Collaboration patterns:** Visualizing co-authorship networks to understand research communities and collaborations driving innovation.
+- **Author productivity:** Highlighting highly productive researchers and their areas of focus. -->
 
 This project presents a novel approach to navigating the vast ocean of arXiv preprints. By leveraging data visualization, we can bridge the gap between raw data and actionable insights, empowering researchers to make informed decisions about their own research directions and collaborations.
 
