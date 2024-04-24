@@ -7,11 +7,6 @@ install.packages('rsconnect')
 ```
 
 ```{r}
-rsconnect::setAccountInfo(name='mtuann',
-			  token='68896A8047548E90ED532176B8CD1FD7',
-			  secret='lEyCzreJeTG+fheHrFj9cXEqlS8/PB8h/TdujamM')
-library(rsconnect)
-  rsconnect::deployApp('mtuann')
 ```
 
 ```{r}
