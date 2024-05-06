@@ -1,0 +1,363 @@
+```{r}
+library(tidyverse)
+library(reshape2)
+```
+
+```{r}
+df <- read_csv("/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/data_medal_cleaned.csv")
+```
+```{r}
+# Filter rows based on game_season = 'Summer'
+season_text <- "Winter"
+df_season <- df %>% filter(game_season == season_text)
+```
+
+```{r}
+# Group by discipline_title and game_year, and count participant_type
+df_disciplines_year <- aggregate(participant_type ~ discipline_title + game_year, data = df_season, FUN = length)
+
+# Pivot the dataframe
+df_heatmap <- reshape(df_disciplines_year, idvar = "discipline_title", timevar = "game_year", direction = "wide")
+
+# Remove "participant_type." from column names
+names(df_heatmap) <- gsub("participant_type.", "", names(df_heatmap))
+
+df_heatmap[is.na(df_heatmap)] <- 0
+# change the value of df_heatmap to binary value except the first column
+df_heatmap[,-1] <- ifelse(df_heatmap[,-1] > 0, 1, 0)
+
+# sort df_heatmap descending by sum of each row (except the first column)   
+df_heatmap <- df_heatmap[order(-rowSums(df_heatmap[,-1])),]
+
+# create df contains 2 columns: discipline_title and sum of each row (except the first column)
+df_sum <- data.frame(discipline_title = df_heatmap$discipline_title, sum = rowSums(df_heatmap[,-1]))
+
+# convert back to data as df_disciplines_year
+df_disciplines_year2 <- melt(df_heatmap, id.vars = "discipline_title", variable.name = "game_year", value.name = "participant_type")
+
+df_disciplines_year2$discipline_title <- factor(df_disciplines_year2$discipline_title, levels = df_disciplines_year2$discipline_title[order(rowSums(df_heatmap[,-1]), decreasing = FALSE)])
+
+# adding one more column to df_disciplines_year2 as the sum of each row in df_heatmap
+df_disciplines_year2$sum <- df_sum$sum[match(df_disciplines_year2$discipline_title, df_sum$discipline_title)]
+
+```
+
+```{r}
+# df_heatmap to .csv file
+write.csv(df_heatmap, file = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/df_heatmap_winter.csv", row.names = FALSE)
+# print shape of df_heatmap
+print(dim(df_heatmap))
+```
+
+```{r}
+# Create custom color palette based on df_heatmap
+color_palette <- c("#FFFFCC", "#FFEDA0", "#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C", "#BD0026", "#800026")
+
+# Create breaks for the color scale
+# breaks <- seq(0, 30, by = 5)
+# from df_sum set the color for each discipline_title by the value of sum column in breaks range
+# color_palette <- color_palette[findInterval(df_sum$sum, breaks, all.inside = TRUE)]
+
+ggplot(df_disciplines_year2, aes(x = game_year, y = discipline_title, fill = factor(participant_type))) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "red"), labels = c("NO", "YES"), name = "HELD") +
+#   scale_y_discrete(labels = color_palette) + # Change y-axis labels to color_palette
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 10, color = color_palette(df_sum$discipline_title)), # Color based on sum column
+        plot.title = element_text(size = 18, hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+```
+
+```{r}
+
+color_palette <- c("#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8A2BE2")
+breaks <- seq(0, 30, by = 5)
+labels <- 1:(length(breaks) - 1)  # Adjusted labels
+df_sum$color_group <- cut(df_sum$sum, breaks = breaks, labels = labels)
+# mapping discipline_title to color_palette based on sum column
+color_palette <- color_palette[as.numeric(df_sum$color_group)]
+# reorder color_palette based on discipline_title in df_disciplines_year2
+color_palette <- color_palette[match(df_disciplines_year2$discipline_title, df_sum$discipline_title)]
+
+
+# Plot the heatmap and use the color_palette for y-axis labels
+
+ggplot(df_disciplines_year2, aes(x = game_year, y = discipline_title, fill = factor(participant_type))) +
+  geom_tile(color = "black") +
+  scale_fill_manual(values = c("white", "green"), labels = c("NO", "YES"), name = "HELD") +
+#   scale_y_discrete(labels = color_palette) + # Change y-axis labels to color_palette
+  theme_minimal() +
+  labs(title = "Heatmap of Sports Participation Over Years", x = "Year", y = "Type of Sports") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 10, color = color_palette), # Color based on sum column
+        plot.title = element_text(size = 18, hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+```
+
+```{r}
+# plot df_sum as bar chart and sort by sum column in descending order
+# ggplot(df_sum, aes(x = reorder(discipline_title, -sum), y = sum, fill = sum)) +
+#   geom_bar(stat = "identity") +
+#   scale_fill_gradient(low = "blue", high = "red") +
+#   theme_minimal() +
+#   labs(title = "Sports Held Over the Years", x = "Type of Sports", y = "Number of Years") +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 10),
+#         plot.title = element_text(size = 18, hjust = 0.5),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.line = element_line(color = "black"),
+#         legend.title = element_text(size = 12),
+#         legend.text = element_text(size = 10),
+#         plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+# the value of sum column in range (0, 30)
+# break the value in range (0, 30) into 6 groups
+# in each group, show on bubble chart with different size, inside the bubble is the name of discipline_title
+# the color of bubble is based on the value of sum column
+library(ggplot2)
+
+# Create breaks for grouping
+breaks <- seq(0, 30, length.out = 7)
+
+# Cut the sum column into 6 groups
+df_sum$group <- cut(df_sum$sum, breaks = breaks, include.lowest = TRUE)
+
+# Define color palette
+color_palette <- rainbow(6)
+
+# Create the plot
+ggplot(df_sum, aes(x = 1, y = discipline_title, size = sum, color = group)) +
+  geom_point(alpha = 0.7, shape = 21) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_manual(values = color_palette) +
+  guides(color = guide_legend(title = "Frequency Group"),
+         size = guide_legend(title = "Frequency")) +
+  theme_minimal() +
+  labs(title = "Bubble Chart of Sports Participation",
+       x = "", y = "Type of Sports") +
+  geom_text(aes(label = discipline_title), size = 3, hjust = -0.1)
+
+# df_sum to .csv file
+write.csv(df_sum, file = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/df_sum.csv", row.names = FALSE)
+``` 
+
+```{r}
+# install.packages("RColorBrewer")
+install.packages("wordcloud")
+```
+```{r}
+# Bubble chart: Represent each discipline_title as a bubble, with the size of the bubble corresponding to the sum.
+# The color of the bubble is based on the sum column.
+# Load required library
+# Data
+
+# Bubble chart
+# Create a stacked bar chart
+ggplot(df_sum, aes(x = sum, y = reorder(discipline_title, sum ))) +
+  geom_bar(stat = "identity", aes(fill = factor(color_group))) +
+  scale_fill_manual(values = rev(c("#800026", "#BD0026", "#E31A1C", "#FC4E2A", "#FEB24C", "#FFEDA0", "#FFFFCC")), 
+                     labels = c("[0,5]", "(5,10]", "(10,15]", "(15,20]", "(20,25]", "(25,30]", "(30,35]")) +
+  theme_minimal() +
+  labs(title = "Stacked Bar Chart of Discipline Titles",
+       x = "Sum",
+       y = "Discipline Title") +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+df_sum <- data.frame(discipline_title = df_heatmap$discipline_title, sum = rowSums(df_heatmap[,-1]))
+# plot df_sum as bar chart and sort by sum column in descending order
+ggplot(df_sum, aes(x = reorder(discipline_title, sum), y = sum, fill = sum)) +
+  geom_bar(stat = "identity") +
+  scale_fill_gradient(low = "green", high = "red") +
+  theme_minimal() +
+  labs(title = "Sports Held Over the Years", x = "Type of Sports", y = "Number of Years") +
+  theme(axis.text.x = element_text(hjust = 1, size = 10),
+        plot.title = element_text(size = 18, hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = unit(c(1, 1, 1, 1), "cm")) +
+    scale_y_continuous(breaks = seq(0, 30, by = 5)) +
+    coord_flip()
+```
+
+
+```{r}
+# sport by event gender, data from df_season, group by discipline_title and event_gender, participant_type and filter by 'athlete' from participant_type
+df_gender = aggregate(medal_type ~ discipline_title + event_gender + participant_type, data = df_season %>% filter(participant_type == 'Athlete'), FUN = length)
+df_gender <- df_gender %>%
+  rename(medal_cnt = medal_type)
+
+# reorder df_gender by discipline_title in ascending order
+df_gender <- df_gender[order(df_gender$discipline_title), ]
+
+gender_colors <- c("Men" = "#FF0000", "Women" = "#0000FF", "Open" = "#00FF00")
+
+# Create stacked bar chart for df_gender
+ggplot(df_gender, aes(x = reorder(discipline_title, -medal_cnt), y = medal_cnt, fill = event_gender)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = gender_colors) +
+    labs(x = "Type of Sports", y = "Count", fill = "Gender") +
+    theme_minimal() +
+    theme(legend.position = "top", axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_y_continuous(breaks = seq(0, 2800, by = 400))
+
+# ggplot(df_gender, aes(x = reorder(discipline_title, -medal_cnt), y = medal_cnt, fill = event_gender)) +
+#     geom_bar(stat = "identity") +
+#     scale_fill_manual(values = gender_colors) +
+#     labs(x = "Type of Sports", y = "Count (log scale)", fill = "Gender") +
+#     theme_minimal() +
+#     theme(legend.position = "top", axis.text.x = element_text(angle = 90, hjust = 1)) +
+#     scale_y_log10(breaks = c(1, 10, 100, 1000, 10000), labels = c(1, 10, 100, 1000, 10000))
+# ```
+# write to .csv file
+write.csv(df_gender, file = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/df_gender_medal_winter.csv", row.names = FALSE)
+```
+```{r}
+
+# Medals awarded by sport
+      medals_by_sport <- df_filtered %>%
+        group_by(discipline_title, medal_type) %>%
+        summarise(count = n(), .groups = "drop")
+      
+      # Define medal colors
+      medal_colors <- c("GOLD" = "#FFD700", "SILVER" = "#C0C0C0", "BRONZE" = "#CD7F32")
+      
+      # get list of discipline_title with sum medal_type >= 90
+      large_medals <- medals_by_sport %>%
+        group_by(discipline_title) %>%
+        summarise(count = sum(count)) %>%
+        filter(count >= 90)
+      
+      small_medals <- medals_by_sport %>%
+        group_by(discipline_title) %>%
+        summarise(count = sum(count)) %>%
+        filter(count < 90)
+      
+      # get data that discipline_title in large_medals
+      medals_by_sport_large <- medals_by_sport %>%
+        filter(discipline_title %in% large_medals$discipline_title) %>%
+        group_by(discipline_title, medal_type) %>%
+        summarise(count = sum(count), .groups = "drop")
+    
+      # get data that discipline_title in small_medals
+      medals_by_sport_small <- medals_by_sport %>%
+        filter(discipline_title %in% small_medals$discipline_title) %>%
+        group_by(discipline_title, medal_type) %>%
+        summarise(count = sum(count), .groups = "drop")
+      
+    ```
+
+```{r}
+df_season = df %>% filter(game_season == "Summer")
+
+count_medal_df <- df_season %>%
+        group_by(game_year, game_name, game_location, medal_type) %>%
+        summarise(count = n(), .groups = "drop")
+# sort by game_year descending and medal_type (length of string)
+count_medal_df <- count_medal_df[order(-count_medal_df$game_year, nchar(count_medal_df$medal_type)),]
+# write to .csv file
+# write.csv(count_medal_df, file = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/count_medal_df_winter.csv", row.names = FALSE)
+```
+```{r}
+medals_by_country <- df_season %>%
+        group_by(medal_type, country_name, country_3_letter_code) %>%
+        summarise(count = n(), .groups = "drop")
+```
+```{r}
+# scatter plot of medals by country and medal type, x-axis is medal_type, y-axis is count, and then value is country_name
+ggplot(medals_by_country, aes(x = medal_type, y = count)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Medals by Country and Medal Type", x = "Medal Type", y = "Count", color = "Country Name") +
+  theme_minimal() + 
+  geom_text(aes(label = country_name))
+```
+
+```{r}
+unique(medals_by_country$country_name)
+```
+
+```{r}
+# get list of (game_name, game_location, country_3_letter_cod, game_year)
+game_info <- df_season %>%
+        group_by(game_name, game_location, game_year) %>%
+        summarise(count = n(), .groups = "drop")
+# sort by game_year descending
+game_info <- game_info[order(-game_info$game_year),]
+# write to .csv file
+write.csv(game_info, file = "/Users/tuan/Desktop/vinuni-stuff/comp5120-datavis/projects/olympic/game_info_summmer.csv", row.names = FALSE)
+```
+
+```{r}
+# Map data
+world_map <- map_data("world")
+
+# Merge data with map
+map_data <- merge(world_map, game_info, by.x = "region", by.y = "game_location", all.x = TRUE)
+
+# Plot
+ggplot(map_data, aes(x = long, y = lat, group = group, fill = count)) +
+  geom_polygon(color = "black") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Count") +
+  labs(title = "Summer Olympic Games Locations by Country",
+       subtitle = "Number of Games Held",
+       x = "", y = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 16, face = "bold"),
+        plot.subtitle = element_text(size = 14),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10))
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+
+1. Increasing Medal Counts Over Time: The number of medals awarded in the Olympic Games has generally increased over the years. For instance, in the recent Tokyo 2020 Games, there were 1080 medals awarded (340 Gold, 338 Silver, and 402 Bronze), compared to only 222 medals in the inaugural Athens 1896 Games.
+
+2. Host Countries and Medal Counts: Host countries often see an increase in the number of medals awarded. For example, in the Beijing 2008 Olympics held in China, there were 957 medals awarded (302 Gold, 302 Silver, and 353 Bronze). Similarly, the United States, as the host of the Atlanta 1996 Games, awarded 842 medals.
+
+3. Consistency in Medal Distribution: The distribution of medal types (Gold, Silver, Bronze) remains relatively consistent across most Olympic Games. However, there may be slight variations depending on factors such as the number of events and participating athletes.
+
+4. Growth in Olympic Participation: The increasing number of medals awarded over the years reflects the growth in Olympic participation. More countries are participating in the Games, leading to a higher number of events and athletes competing for medals.
+
+5. Historical Context: The data provides a historical overview of the Olympic Games, showing how the event has evolved over time from the modest Athens 1896 Games to the grand Tokyo 2020 Games. Each edition of the Games reflects the global sporting landscape and the socio-political context of its time.
+
+
+
+1. Consistent Medal Counts in Recent Games: The number of medals awarded in recent Winter Olympics, such as PyeongChang 2018 and Beijing 2022, remained consistent across all three types (Gold, Silver, and Bronze), with each type having similar counts.
+
+2. Host Countries and Medal Counts: Host countries tend to perform well in their respective Olympics. For example, Canada, as the host of the Calgary 1988 and Vancouver 2010 Games, had a relatively high number of medals awarded during those events.
+
+3. Variation in Medal Counts Across Years: The number of medals awarded fluctuates across different Winter Olympics. For instance, there were fewer medals awarded in the Lake Placid 1980 and Sarajevo 1984 Games compared to other editions.
+
+4. Historical Trends: The data also reflects historical trends, with earlier Olympics having fewer events and therefore fewer medals awarded compared to more recent ones. For example, the first Winter Olympics in Chamonix 1924 had a total of 49 medals awarded, while recent editions have seen over 300 medals awarded.
+
+5. Consistency in Gold, Silver, and Bronze Distribution: Across most Winter Olympics, there is a relatively even distribution of Gold, Silver, and Bronze medals, indicating fair competition and performance across different events.
+
+Overall, the data provides insights into the performance and distribution of medals in Winter Olympic Games over the years, highlighting trends and patterns in medal counts.
+```
+

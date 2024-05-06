@@ -10,3 +10,5 @@ olympic/*.zip
 olympic/Johns_Hopkins_Data_Visualization_and_Dashboarding_With_R/
 olympic/rio2016/
 olympic/rsconnect/
+olympic/*df*.csv
+olympic/*summmer*.csv
