@@ -23,7 +23,7 @@ date_counts <- data %>%
 # Basic time series line plot
 ggplot(date_counts, aes(x=date, y=title_count)) +
   geom_line() +
-  labs(title="Number of Titles Over Time",
+  labs(title="Number of Preprints Over Time",
        x="Date",
        y="Number of Titles") +
   theme_minimal()
@@ -32,7 +32,7 @@ ggplot(date_counts, aes(x=date, y=title_count)) +
 ggplot(date_counts, aes(x=date, y=title_count)) +
   geom_line() +
   geom_smooth(method="loess",formula = 'y ~ x', colour="red") +
-  labs(title="Number of Titles Over Time with Trend Line",
+  labs(title="Number of Preprints Over Time with Trend Line",
        x="Date",
        y="Number of Titles") +
   theme_minimal()
@@ -40,7 +40,7 @@ ggplot(date_counts, aes(x=date, y=title_count)) +
 # A bar plot to show titles count per date
 ggplot(date_counts, aes(x=date, y=title_count)) +
   geom_bar(stat="identity", fill="steelblue") +
-  labs(title="Daily Title Counts",
+  labs(title="Daily Preprints Counts",
        x="Date",
        y="Number of Titles") +
   theme_minimal()
