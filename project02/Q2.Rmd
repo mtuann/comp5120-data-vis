@@ -1,0 +1,54 @@
+```{r}
+library(dplyr)
+library(tidyr)
+library(lubridate)
+
+# Load the data
+data <- read.csv("arxiv05_v2.csv", stringsAsFactors = FALSE)
+
+# Correct the date format to match "dd/mm/yyyy"
+data$date <- as.Date(data$date, format = "%d/%m/%Y")
+data <- data[!is.na(data$date), ]
+
+# Separate the 'tags' into multiple rows
+data_long <- data %>%
+  mutate(tags = gsub(";", ",", tags)) %>%  # Replace semicolons with commas if needed
+  separate_rows(tags, sep = ",") %>%
+  mutate(tags = trimws(tags))  # Remove any leading/trailing whitespace
+
+# Count occurrences of each tag
+tag_counts <- data_long %>%
+  group_by(tags) %>%
+  summarise(total_count = n(), .groups = 'drop') %>%
+  filter(total_count > 5) # Optional: Filter to display only tags with more than 5 occurrences
+
+# Plot the data
+ggplot(tag_counts, aes(x = reorder(tags, total_count), y = total_count, fill = total_count)) +
+  geom_bar(stat = "identity", color = "black") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Total Occurrences of Each Tag",
+       x = "Tags",
+       y = "Total Count") +
+  scale_fill_gradient(low = "blue", high = "red")
+
+
+```
+
+**"What is the relative proportion of each category within the whole dataset?"**
+
+```{r}
+library(plotly)
+
+plot_ly(tag_counts, labels = ~tags, values = ~total_count, type = 'pie', textinfo = 'label+percent',
+        insidetextorientation = 'radial') %>%
+  layout(title = "Pie Chart of Tag Occurrences")
+
+
+```
+
+```{r}
+library(wordcloud)
+wordcloud(words = tag_counts$tags, freq = tag_counts$total_count, min.freq = 1,
+          scale = c(3, 0.5), colors = brewer.pal(8, "Dark2"))
+
+```
