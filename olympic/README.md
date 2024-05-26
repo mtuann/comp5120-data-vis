@@ -1,11 +1,11 @@
 ## Project Proposal: Unveiling Olympic Glory Through Data Visualization
 
-**Data:** Olympic Games Dataset (1896-2016)
+**Data:** Olympic Games Dataset (1896-2022) in both Summer and Winter Olympics.
 
 - The shiny app is available at [Olympic Games Data 1896 - 2022](https://mtuann.shinyapps.io/olympic/). It might take up to 30 seconds to load the data (20217 rows, 15 columns).
 - The source code is available at [Github](https://github.com/mtuann/comp5120-data-vis/blob/main/olympic/rio2016.R). 
 
-**Summary:** This project explores a dataset containing information on athletes who participated in the Olympic Games from 1896 to 2016. It includes details like name, gender, age, nationality (NOC), games details (year, season, city), sport, and medal achievements.
+**Summary:** This project explores a dataset containing information on athletes who participated in the Olympic Games from 1896 to 2022. It includes details like name, gender, nationality (NOC), games details (year, season, city), sport, and medal achievements.
 
 **Research Questions:**
 
