@@ -2,15 +2,18 @@
 
 **Data:** Olympic Games Dataset (1896-2016)
 
-**Summary:** This project explores a dataset containing information on athletes who participated in the Olympic Games from 1896 to 2016. It includes details like name, gender, age, physical attributes, nationality (NOC), games details (year, season, city), sport, and medal achievements.
+- The shiny app is available at [Olympic Games Data 1896 - 2022](https://mtuann.shinyapps.io/olympic/). It might take up to 30 seconds to load the data (20217 rows, 15 columns).
+- The source code is available at [Github](https://github.com/mtuann/comp5120-data-vis/blob/main/olympic/rio2016.R). 
+
+**Summary:** This project explores a dataset containing information on athletes who participated in the Olympic Games from 1896 to 2016. It includes details like name, gender, age, nationality (NOC), games details (year, season, city), sport, and medal achievements.
 
 **Research Questions:**
 
-1. **Evolution of Participation:** How has athlete participation in the Olympics changed over time, considering factors like gender and region?
+1. **Evolution of Sports Participation:** How has sports participation evolved over the years in the Summer and Winter Olympics? Are there any emerging trends in the inclusion of new sports?
 2. **Dominant Sports:**  Which sports have historically garnered the most medals? Are there any trends in medal distribution across various sports?
 3. **Powerhouse Nations:** Which countries have consistently dominated the Olympics in terms of medal count? Are there any emerging trends in national performance?
-4. **Age and Success:** Is there a correlation between an athlete's age and their likelihood of winning a medal? Does this vary across different sports?
-5. **Physical Attributes and Performance:** Do physical attributes like height and weight play a role in medal success across various sports?
+4. **Bias in hosting countries:** Do host countries have a significant advantage in terms of medal count compared to other participating nations?
+5. **Gender Participation:** How has the participation rates and medal counts between male and female athletes evolved over time? Are there any disparities in specific sports?
 
 **Importance and Challenges:**
 
