@@ -1,0 +1,47 @@
+**Q1: How does the number of titles change from day to day?**
+
+Is there a general trend in the number of titles over time? Are the number of titles generally increasing or decreasing?
+
+What is the distribution of the number of titles across different days? Are there specific days with significantly higher or lower numbers of titles?
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+
+# Load the data
+data <- read.csv("arxiv05_v2.csv", stringsAsFactors = FALSE)
+# Convert the 'date' column to a Date type
+data$date <- as.Date(data$date, format="%d/%m/%Y")
+
+# Create a new dataframe that counts the number of titles per date
+date_counts <- data %>%
+  group_by(date) %>%
+  summarize(title_count = n())
+
+# Basic time series line plot
+ggplot(date_counts, aes(x=date, y=title_count)) +
+  geom_line() +
+  labs(title="Number of Preprints Over Time",
+       x="Date",
+       y="Number of Titles") +
+  theme_minimal()
+
+# Adding a smooth trend line
+ggplot(date_counts, aes(x=date, y=title_count)) +
+  geom_line() +
+  geom_smooth(method="loess",formula = 'y ~ x', colour="red") +
+  labs(title="Number of Preprints Over Time with Trend Line",
+       x="Date",
+       y="Number of Titles") +
+  theme_minimal()
+
+# A bar plot to show titles count per date
+ggplot(date_counts, aes(x=date, y=title_count)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  labs(title="Daily Preprints Counts",
+       x="Date",
+       y="Number of Titles") +
+  theme_minimal()
+```
