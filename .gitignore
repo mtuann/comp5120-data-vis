@@ -12,3 +12,10 @@ olympic/rio2016/
 olympic/rsconnect/
 olympic/*df*.csv
 olympic/*summmer*.csv
+
+olympic/.RData
+olympic/.Rhistory
+olympic/olp8622.ipynb
+olympic/story-script.md
+project02/data_arxiv_2324_comments.json
+project02/filter.ipynb

@@ -26,12 +26,15 @@ ui <- fluidPage(
       #   ), 
       # ),
     ),
-    
+    # Mean medals for host countries: 38.74
+    # Mean medals for non-host countries: 14.535340314136125
+    # T-statistic: 7.514655610310393, P-value: 1.5080550141806764e-13
+    # Correlation between being the host and medal count: 0.2549949968076143
     
     
     mainPanel(
       tabsetPanel(
-        tabPanel("Sports Type",
+        tabPanel("Game Type",
                  fluidRow(
                    column(12, plotlyOutput("heatmapPlotSport", height = "1000px", width = "1000px")),
                    column(12, plotlyOutput("barchartSport", height = "1000px", width = "1000px")),
@@ -50,16 +53,22 @@ ui <- fluidPage(
                   column(12, plotlyOutput("medalstat2", height = "1000px")),
                 )
         ),
-        tabPanel("Medal Statistics", 
+        tabPanel("Medal Statistics",
+          uiOutput("commentsHostBias"),
           plotlyOutput("emptyPlot1", height = "1000px"),
           uiOutput("commentsMedalist"),
+          uiOutput("commentsMedalByGameSeason"),
           DTOutput("tableMedalist"),
-        
+          uiOutput("commentsMedalByContry"),
+          DTOutput("medalplot4")
         ),
-        tabPanel("Medal by Countries", DTOutput("medalplot4")),
-        tabPanel("Top 20 Individual Participants", DTOutput("emptyPlot3")),
-        tabPanel("GameTeam Discipline", DTOutput("emptyPlot4")),
-      )
+        tabPanel("Game Records",
+          uiOutput("commentsGameIndividual"),
+          DTOutput("emptyPlot3"),
+          uiOutput("commentsGameTeam"),
+          DTOutput("emptyPlot4")
+        )
+      )   
     )
   )
 )
@@ -143,7 +152,7 @@ server <- function(input, output) {
     output$comments <- renderUI({
       if (input$game_season == "Summer") 
         tags$div(
-          tags$h3("Summer season:"),
+          tags$h3("Summer season (types of sports):"),
           tags$ul(
             tags$li("Highly Consistent Sports: Athletics, Fencing, and Swimming are among the most consistent sports, appearing in almost every edition of the Summer Olympics. These sports can be considered as the cornerstone of the Olympic program."),
             tags$li("Water Sports: Water Polo, Diving, and Sailing are examples of sports that have been consistently present in the Olympics, particularly in recent years, indicating the importance of water sports in the Olympic program."),
@@ -153,7 +162,7 @@ server <- function(input, output) {
         )
       else
         tags$div(
-          tags$h3("Winter season:"),
+          tags$h3("Winter season (types of sports):"),
           tags$ul(
             tags$li("Traditional winter sports like cross-country skiing, figure skating, ice hockey, and ski jumping have been consistent since the inception of the Winter Olympics in 1924."),
             tags$li("Alpine skiing, biathlon, luge, and freestyle skiing were introduced in later years, adding variety to the Games."),
@@ -201,7 +210,7 @@ server <- function(input, output) {
 output$genderComments <- renderUI({
       if (input$game_season == "Summer") 
         tags$div(
-          tags$h3("Summer season:"),
+          tags$h3("Summer season (gender participation):"),
           tags$ul(
             tags$li("Participation Discrepancy: There is a significant difference in participation between male and female athletes across various sports. For example, in athletics, 1913 medals were awarded to male athletes compared to 882 to female athletes."),
             tags$li("Gender Gap in Some Sports: Some sports have a substantial gender gap in participation. For instance, in wrestling, 1264 medals were awarded to male athletes compared to only 92 to female athletes."),
@@ -211,7 +220,7 @@ output$genderComments <- renderUI({
         )
       else
         tags$div(
-          tags$h3("Winter season:"),
+          tags$h3("Winter season (gender participation):"),
           tags$ul(
             tags$li("Gender Parity: Alpine Skiing, Biathlon, Cross Country Skiing, Freestyle Skiing, Luge, Short Track, Short Track Speed Skating, Skeleton, and Snowboard all show relatively equal participation between men and women athletes, with only slight differences in medal counts."),
             tags$li("Dominance: Speed skating stands out as a discipline where men have a considerably higher medal count compared to women. This suggests a potential dominance of male athletes in this sport, which could be influenced by factors like training resources, participation rates, or physiological differences."),
@@ -221,29 +230,52 @@ output$genderComments <- renderUI({
         )
     })
 
-output$commentsMedalist <- renderUI({
-      if (input$game_season == "Summer") 
+    output$commentsMedalist <- renderUI({
+      if (input$game_season == "Summer")
         tags$div(
-          tags$h3("Summer season:"),
+          tags$h3("Summer season (medal distribution):"),
           tags$ul(
             tags$li("Increasing Medal Counts Over Time: The number of medals awarded in the Olympic Games has generally increased over the years. For instance, in the recent Tokyo 2020 Games, there were 1080 medals awarded (340 Gold, 338 Silver, and 402 Bronze), compared to only 222 medals in the inaugural Athens 1896 Games."),
             tags$li("Consistency in Medal Distribution: The distribution of medal types (Gold, Silver, Bronze) remains relatively consistent across most Olympic Games. However, there may be slight variations depending on factors such as the number of events and participating athletes."),
-            tags$li("Growth in Olympic Participation: The increasing number of medals awarded over the years reflects the growth in Olympic participation. More countries are participating in the Games, leading to a higher number of events and athletes competing for medals."),
+            tags$li("Growth in Olympic Participation: The increasing number of medals awarded over the years reflects the growth in Olympic participation. More countries are participating in the Games, leading to a higher number of events and athletes competing for medals.")
           )
         )
       else
         tags$div(
-          tags$h3("Winter season:"),
+          tags$h3("Winter season (medal distribution):"),
           tags$ul(
             tags$li("Consistent Medal Counts in Recent Games: The number of medals awarded in recent Winter Olympics, such as PyeongChang 2018 and Beijing 2022, remained consistent across all three types (Gold, Silver, and Bronze), with each type having similar counts."),
             tags$li("Historical Trends: The data also reflects historical trends, with earlier Olympics having fewer events and therefore fewer medals awarded compared to more recent ones. For example, the first Winter Olympics in Chamonix 1924 had a total of 49 medals awarded, while recent editions have seen over 300 medals awarded."),
-            tags$li("Consistency in Gold, Silver, and Bronze Distribution: Across most Winter Olympics, there is a relatively even distribution of Gold, Silver, and Bronze medals, indicating fair competition and performance across different events."),
+            tags$li("Consistency in Gold, Silver, and Bronze Distribution: Across most Winter Olympics, there is a relatively even distribution of Gold, Silver, and Bronze medals, indicating fair competition and performance across different events.")
           
           )
         )
     })
-    
-    
+
+    # comment medal by game season
+    output$commentsMedalByGameSeason <- renderUI({
+      if (input$game_season == "Summer") 
+        tags$div(
+          tags$h3("Table shows medal counts by Olympic Games: Summer season")
+        )
+      else
+        tags$div(
+          tags$h3("Table shows medal counts by Olympic Games: Winter season")
+        )
+    })
+
+    # comment medal by country
+    output$commentsMedalByContry <- renderUI({
+      if (input$game_season == "Summer") 
+        tags$div(
+          tags$h3("Table shows medal counts by country: Summer season")
+        )
+      else
+        tags$div(
+          tags$h3("Table shows medal counts by country: Winter season")
+        )
+    })
+
        # Create a new dataframe with counts
       count_medal_df <- df_filtered %>%
         group_by(game_year, game_name, game_location, medal_type) %>%
@@ -279,7 +311,20 @@ output$commentsMedalist <- renderUI({
       
       ggplotly(p)
     })
-
+    # comment host bias
+    output$commentsHostBias <- renderUI({
+      tags$div(
+        tags$h3("Host Bias Analysis (both seasons):"),
+        tags$ul(
+          tags$li("Mean medals for host countries: 38.74"),
+          tags$li("Mean medals for non-host countries: 14.535340314136125"),
+          tags$li("T-statistic: 7.514655610310393, P-value: 1.5080550141806764e-13"),
+          tags$li("Correlation between being the host and medal count: 0.2549949968076143")
+        ),
+        # A value of 0.255 indicates a positive correlation, meaning there is a tendency for the medal count to increase when a country hosts the Olympics. However, the value is relatively low, suggesting that while there is a positive relationship, it is not very strong.
+        tags$p("A value of 0.255 indicates a positive correlation, meaning there is a tendency for the medal count to increase when a country hosts the Olympics. However, the value is relatively low, suggesting that while there is a positive relationship, it is not very strong.")
+      )
+    })
 
       # Table
       output$tableMedalist <- renderDT({
@@ -315,17 +360,20 @@ output$commentsMedalist <- renderUI({
       
       # Define medal colors
       medal_colors <- c("GOLD" = "#FFD700", "SILVER" = "#C0C0C0", "BRONZE" = "#CD7F32")
-      
+      set_limit = 90
+      if (input$game_season == "Winter") {
+        set_limit = 75
+      }
       # get list of discipline_title with sum medal_type >= 90
       large_medals <- medals_by_sport %>%
         group_by(discipline_title) %>%
         summarise(count = sum(count)) %>%
-        filter(count >= 90)
+        filter(count >= set_limit)
       
       small_medals <- medals_by_sport %>%
         group_by(discipline_title) %>%
         summarise(count = sum(count)) %>%
-        filter(count < 90)
+        filter(count < set_limit)
       
       # get data that discipline_title in large_medals
       medals_by_sport_large <- medals_by_sport %>%
@@ -343,7 +391,7 @@ output$commentsMedalist <- renderUI({
       plot_large <- ggplot(medals_by_sport_large, aes(x = reorder(discipline_title, -count), y = count, fill = medal_type)) +
         geom_bar(stat = "identity") +
         scale_fill_manual(values = medal_colors) +
-        labs(x = "Sport types with a number of awarded medals >= 90", y = "Count", fill = "Medal Type") +
+        labs(x = paste("Sport types with a number of awarded medals >=", set_limit), y = "Count", fill = "Medal Type") +
         theme_minimal() +
         theme(legend.position = "top", axis.text.x = element_text(angle = 90, hjust = 1)) +
         scale_y_continuous(breaks = seq(0, 3200, by = 400))
@@ -352,7 +400,7 @@ output$commentsMedalist <- renderUI({
       plot_small <- ggplot(medals_by_sport_small, aes(x = reorder(discipline_title, -count), y = count, fill = medal_type)) +
         geom_bar(stat = "identity") +
         scale_fill_manual(values = medal_colors) +
-        labs(x = "Sport types with a number of awarded medals < 90", y = "Count", fill = "Medal Type") +
+        labs(x = paste("Sport types with a number of awarded medals <", set_limit), y = "Count", fill = "Medal Type") +
         theme_minimal() +
         theme(legend.position = "top", axis.text.x = element_text(angle = 90, hjust = 1)) +
         scale_y_continuous(breaks = seq(0, 100, by = 20))
@@ -372,25 +420,40 @@ output$commentsMedalist <- renderUI({
       top_participants <- df_athlete %>%
         group_by(athlete_full_name, country_name, discipline_title) %>%
         summarise(count = n(), .groups = "drop") %>%
-        top_n(20, count) %>%
+        top_n(50, count) %>%
         arrange(desc(count))
-    
+    # comment game individual
+
+    output$commentsGameIndividual <- renderUI({
+      tags$div(
+        tags$h3("Table shows top 50 participants with the most medals")
+      )
+    })
+
       # Table
       output$emptyPlot3 <- renderDT({
         datatable(top_participants, 
                   options = list(
                     searching = TRUE,
-                    pageLength = 20
+                    pageLength = 50
                   )
         )
       })
+    
+    # Top 20 game teams with the most medals
+    output$commentsGameTeam <- renderUI({
+      tags$div(
+        tags$h3("Table shows top 20 game teams with the most medals")
+      )
+    })
+
 
       # select only game_team (participant_type = "GameTeam") and group by game_name and country_name
     df_gameteam <- df_filtered[df_filtered$participant_type == "GameTeam",]
     top_participants_team <- df_gameteam %>%
       group_by(game_name, country_name, medal_type, discipline_title) %>%
       summarise(count = n(), .groups = "drop") %>%
-      top_n(100, count) %>%
+      top_n(20, count) %>%
       arrange(desc(count))
 
             # Table
@@ -398,7 +461,7 @@ output$commentsMedalist <- renderUI({
         datatable(top_participants_team, 
                   options = list(
                     searching = TRUE,
-                    pageLength = 20
+                    pageLength = 50
                   )
         )
       })
