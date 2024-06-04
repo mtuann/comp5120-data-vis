@@ -1,6 +1,6 @@
 Text Complexity Analysis: Calculate readability scores for abstracts and plot these scores across different fields to see if some areas tend to have more complexly written papers than others.
 
-```{r pressure, fig.width=10, fig.height=8}
+```{r}
 # Load necessary libraries
 library(tidyverse)
 library(quanteda)
@@ -52,7 +52,6 @@ ggplot(subject_readability, aes(x = subject, y = mean_readability, fill = -mean_
        x = "Subject",
        y = "Average Readability Score (Flesch Reading Ease)") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-  plot.title = element_text(face = "bold"))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   coord_cartesian(ylim = c(0, max(subject_readability$mean_readability, na.rm = TRUE) + 5))
 ```
