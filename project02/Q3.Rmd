@@ -1,0 +1,55 @@
+```         
+```
+
+```{r}
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(circlize)
+library(stringr)
+library(plotly)
+
+# 1. Load and preprocess the data
+df <- read.csv('arxiv05_v2.csv')
+
+# Chuyển đổi cột 'date' sang kiểu ngày
+df$date <- as.Date(df$date, format = "%d/%m/%Y")   # Điều chỉnh format nếu cần thiết
+
+# Split tags and create a tidy format
+df_tidy <- df %>%
+  mutate(tags = strsplit(tags, ", ")) %>%
+  unnest(tags) %>%
+  group_by(tags) %>%
+  summarise(counts = n(), .groups = "drop") %>%
+  arrange(desc(counts))
+
+# 2. Select top 15 common tags
+top_tags <- df_tidy %>%
+  head(15)
+
+# Filter the data for only the top tags
+df_filtered <- df %>%
+  mutate(tags = strsplit(tags, ", ")) %>%
+  unnest(tags) %>%
+  filter(tags %in% top_tags$tags) %>%
+  group_by(date, tags, time) %>% # Group by cả date và time
+  summarise(counts = n(), .groups = "drop") %>%
+  arrange(date) # Sắp xếp theo date tăng dần
+
+df_filtered$time <- factor(df_filtered$time, levels = unique(df_filtered$time[order(df_filtered$date)]))
+# 3. Heatmap for top tags
+df_filtered <- df_filtered %>%
+    mutate(month_year = floor_date(date, "month"))
+df_first_day <- df_filtered %>%
+    group_by(month_year) %>%
+    filter(date == min(date))
+plot_ly(df_filtered, x = ~date, y = ~tags, z = ~counts, type = "heatmap",
+        colors = "Blues", hovertemplate = "<b>%{y}</b><br>Date: %{x}<br>Count: %{z}<extra></extra>") %>%
+    layout(title = "Heatmap of Top 15 Tag Occurrences Over Time",
+           xaxis = list(title = "Month-Year", 
+                        tickmode = "array",  
+                        tickvals = df_first_day$month_year,
+                        ticktext = format(df_first_day$month_year, "%b %Y"),
+                        tickangle = -45),
+           yaxis = list(title = "Tags"))
+```
