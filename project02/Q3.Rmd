@@ -1,4 +1,5 @@
 ```         
+Heat Maps: Display the intensity of publications in different research areas across time, allowing you to spot seasonal trends or bursts in activity.
 ```
 
 ```{r}
