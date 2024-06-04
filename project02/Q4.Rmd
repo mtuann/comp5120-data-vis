@@ -1,0 +1,58 @@
+Text Complexity Analysis: Calculate readability scores for abstracts and plot these scores across different fields to see if some areas tend to have more complexly written papers than others.
+
+```{r pressure, fig.width=10, fig.height=8}
+# Load necessary libraries
+library(tidyverse)
+library(quanteda)
+
+
+# Step 1: Read the data
+data <- read_csv("arxiv05_v2.csv", show_col_types = FALSE)  # Update the path to your CSV file
+#data <- read_csv("/Users/nhuvo/Desktop/new.csv", show_col_types = FALSE)
+
+# Kiểm tra và loại bỏ NA từ cột summary
+data <- data %>% filter(!is.na(summary))
+
+# Tính điểm đọc dễ dàng Flesch, loại bỏ NA trước khi chuyển đổi sang số
+data$readability <- textstat_readability(data$summary, measure = "Flesch")$Flesch
+data$readability <- as.numeric(data$readability)
+
+# Xác định và loại bỏ bất kỳ hàng nào còn lại với NA trong 'readability'
+data <- data %>% filter(!is.na(readability))
+
+# Định nghĩa ánh xạ từ mã môn học sang nhãn
+tag_subject <- list(
+    cs = "Computer Science",
+    eess = "Electrical Engineering",
+    math = "Mathematics",
+    physics = "Physics",
+    `q-bio` = "Quantitative Biology",
+    `q-fin` = "Quantitative Finance",
+    stat = "Statistics",
+    econ = "Economics"
+)
+
+# Chuyển đổi các viết tắt môn học thành tên đầy đủ, loại bỏ NA
+data <- data %>%
+  mutate(subject = ifelse(is.na(subject), "Unknown", subject),
+         subject_list = str_split(subject, ",\\s*")) %>%
+  unnest(subject_list) %>%
+  mutate(subject = map_chr(subject_list, ~ ifelse(. %in% names(tag_subject), tag_subject[[.]], "Other")))
+
+# Tổng hợp điểm đọc dễ dàng theo môn học
+subject_readability <- data %>%
+  group_by(subject) %>%
+  summarise(mean_readability = mean(readability, na.rm = TRUE))
+
+# Vẽ biểu đồ
+ggplot(subject_readability, aes(x = subject, y = mean_readability, fill = -mean_readability)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_gradient(low = "lightcoral", high = "darkred") +
+  labs(title = "Readability Scores by Subject",
+       x = "Subject",
+       y = "Average Readability Score (Flesch Reading Ease)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+  plot.title = element_text(face = "bold"))+
+  coord_cartesian(ylim = c(0, max(subject_readability$mean_readability, na.rm = TRUE) + 5))
+```
