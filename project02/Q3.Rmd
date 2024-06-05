@@ -1,5 +1,6 @@
 ```         
 Heat Maps: Display the intensity of publications in different research areas across time, allowing you to spot seasonal trends or bursts in activity.
+
 ```
 
 ```{r}
@@ -9,6 +10,7 @@ library(ggplot2)
 library(circlize)
 library(stringr)
 library(plotly)
+library(lubridate)
 
 # 1. Load and preprocess the data
 df <- read.csv('arxiv05_v2.csv')
@@ -53,4 +55,62 @@ plot_ly(df_filtered, x = ~date, y = ~tags, z = ~counts, type = "heatmap",
                         ticktext = format(df_first_day$month_year, "%b %Y"),
                         tickangle = -45),
            yaxis = list(title = "Tags"))
+```
+
+```{r}
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(circlize)
+library(stringr)
+library(plotly)
+library(tidyr)
+# 1. Load and preprocess the data
+df <- read.csv('arxiv05_v2.csv')
+
+# Convert the 'date' column to date type
+df$date <- as.Date(df$date, format = "%d/%m/%Y")   # Adjust format if necessary
+
+# Split tags and create a tidy format
+df_tidy <- df %>%
+  mutate(tags = strsplit(as.character(tags), ", ")) %>%
+  unnest(tags) %>%
+  group_by(tags) %>%
+  summarise(counts = n(), .groups = "drop") %>%
+  arrange(desc(counts))
+
+# 2. Select top 15 common tags
+top_tags <- df_tidy %>%
+  head(15)
+
+# Adjustments for creating month-year labels correctly
+df_filtered <- df %>%
+  mutate(tags = strsplit(as.character(tags), ", ")) %>%
+  unnest(tags) %>%
+  filter(tags %in% top_tags$tags) %>%
+  group_by(date, tags) %>%
+  summarise(counts = n(), .groups = "drop") %>%
+  arrange(date) # Sort by date in ascending order
+
+# Now, create the month-year column for filtered data
+df_filtered$month_year_label <- format(df_filtered$date, "%m-%Y")
+
+# Find the first day of each month in the data for custom tick marks
+df_first_day <- df_filtered %>%
+  group_by(month_year_label) %>%
+  summarize(first_date = min(date)) %>%
+  ungroup()
+
+# Create a heatmap for top tags using plotly
+p <- plot_ly(df_filtered, x = ~date, y = ~tags, z = ~counts, type = "heatmap",
+             colors = "Blues", hovertemplate = "<b>%{y}</b><br>Date: %{x}<br>Count: %{z}<extra></extra>") %>%
+  layout(title = "Heatmap of Top 15 Tag Occurrences Over Time",
+         xaxis = list(title = "Month-Year", 
+                      tickmode = "array",  
+                      tickvals = df_first_day$first_date,
+                      ticktext = df_first_day$month_year_label,
+                      tickangle = -45),
+         yaxis = list(title = "Tags"))
+
+p
 ```
