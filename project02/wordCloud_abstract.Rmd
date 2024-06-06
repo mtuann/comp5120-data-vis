@@ -1,0 +1,73 @@
+---
+title: "testList"
+output: html_document
+date: "2024-06-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(readr)
+library(wordcloud2) 
+library(webshot)
+library(dplyr)
+library(ggplot2)
+webshot::install_phantomjs()
+```
+
+```{r}
+head(demoFreq)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+string_list <- readLines("list_1.txt")
+string_counts <- table(string_list)
+data_frame <- data.frame(word = names(string_counts), freq = string_counts)
+data_frame <- data_frame[, !(colnames(data_frame) %in% "freq.string_list")]
+data_frame <- within(data_frame, names(freq.Freq)[1] <- "freq")
+data_frame <- arrange(data_frame, desc(freq.Freq)) 
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+# colnames(data_frame)
+data_frame1 <- data_frame
+# min_value <- min(data_frame1$freq)
+# data_frame1$freq <- data_frame1$freq / 100
+# data_frame_B <- data.frame(
+#   word = data_frame1[["word"]],
+#   freq = seq_along(data_frame1)
+# )
+my_graph <- wordcloud2(data=data_frame1, size=0.5)
+my_graph
+# library("htmlwidgets")
+# saveWidget(my_graph,"tmp.html",selfcontained = F)
+# 
+# # and in png or pdf
+# webshot("tmp.html","fig_1.pdf", delay =100, vwidth = 480, vheight=480)
+```
+
+
+```{r}
+data_frame1 <- data_frame[1:30,]
+data_frame1 <- data_frame1[order(data_frame1$freq.Freq, decreasing = TRUE), ]
+
+# Create the bar plot using ggplot2
+plot<-ggplot(data_frame1, aes(x = reorder(word, -freq.Freq), y = freq.Freq)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Word Frequency Bar Plot", x = "Word", y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
