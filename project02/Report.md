@@ -49,6 +49,7 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 
 ## Analysis of research topic frequencies over time
 
+### Comparative Analysis of Topics Clouds from arXiv Computer Science Abstracts (January vs. April 2024)
 ![Comparative Analysis of Topics Clouds from arXiv Computer Science Abstracts (January vs. April 2024)](images/Slide12.png)
 ![Comparative Analysis of Topics Clouds from arXiv Computer Science Abstracts (January vs. April 2024)](images/Slide13.png)
 
@@ -67,8 +68,9 @@ Consistent Core Areas: Despite the shifts, core areas like "deep learning," "mac
 ![Barplot top 30 most frequency terms](images/Slide14_4.png)
 Newer terms like "diffusion models" and "federated learning" suggest a growing interest in generative models and privacy-preserving machine learning techniques. On the other hand, terms like "explainable", "graph neural network" are excluded from top used term.
 
+### Topics Clouds from arXiv Computer Science Title (January vs. April 2024)
 ![Topics cloud extracted in Paper’s Title](images/Slide15.png)
-The topics cloud visually encapsulates key research trends in the Computer Science field, highlighting "large language models" and "natural language processing" as highly prominent areas. This indicates significant research activity focused on advancing language understanding technologies. "Deep learning" and "machine learning" are central, underscoring their foundational role in developing advanced computational methods. The term "artificial intelligence" spans various aspects, reflecting its broad and sustained research interest. Emerging terms like "federated learning" and "diffusion models" suggest growing interest.
+The topics cloud visually encapsulates key research trends in the Computer Science field, highlighting "large language models" and "natural language processing" as highly prominent areas. This indicates significant research activity focused on advancing language understanding technologies. "Deep learning" and "machine learning" are central, underscoring their foundational role in developing advanced computational methods. The term "artificial intelligence" spans various aspects, reflecting its broad and sustained research interest. Emerging terms like "federated learning" and "diffusion models" suggest growing interest. The cloud contains less number of terms since the titles are often short.
 
 ### Heatmap of Top 15 Tag Occurrences Over Time
 ![Heatmap of Top 15 Tag Occurrences Over Time](images/Slide16.png)
