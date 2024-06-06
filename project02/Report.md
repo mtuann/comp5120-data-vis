@@ -46,6 +46,24 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 ## Question 1: How has the number of preprints in different research areas related to Computer Science changed over time?
 
 ## Question 2: What are the most common keywords in the titles and abstracts of preprints in the field of Computer Science?
+## Analysis of research topic frequencies over time
+
+![Heatmap of Top 15 Tag Occurrences Over Time](image/Slide16.png)
+
+The heatmap visualization delineates the occurrences of the top 15 tags associated with research topics over a six-month period, from December 2023 to May 2024. This graphical representation is instrumental in identifying trends and shifts in research focus within the realm of computer science.
+The tags, representing various subfields such as machine learning ('cs.LG'), computer vision ('cs.CV'), and artificial intelligence ('cs.AI'), show varying levels of activity each month. Notably, the tag 'cs.CV' exhibited consistently high activity, indicating a strong and sustained focus on computer vision research.
+In contrast, 'cs.AI' showed fluctuating levels of lower activity, suggesting a more variable interest in artificial intelligence topics over the observed period.
+
+This heatmap allows us to pinpoint which research areas are garnering more attention and which are experiencing declines or fluctuations.
+
+## Text complexity analysis across scientific disciplines
+
+![Readability Scores by Subject](image/Slide16.png)
+
+Readability scores across various scientific disciplines are examined using the Flesch Reading Ease formula. The disciplines analyzed include Computer Science, Economics, Electrical Engineering, Mathematics, Physics, Quantitative Biology, Quantitative Finance, and Statistics. The scores are indicative of how accessible the text in research papers is, with higher scores suggesting easier readability.
+
+The findings show that Computer Science and Economics possess the highest readability scores, implying that research papers in these fields are comparatively easier to comprehend. This could be due to more straightforward language or less dense jargon compared to other fields.
+On the other hand, Physics and Quantitative Biology have lower readability scores, reflecting the potential complexity of the language and concepts used in these papers. Such data is crucial for academic publishers and educational institutions as it highlights the need for different levels of simplification or explanation to aid understanding depending on the field.
 
 # Conclusion:
 In this study, we have developed a suite of data visualizations to uncover hidden patterns and trends within arXiv preprints, focusing specifically on the field of Computer Science. By analyzing the titles, abstracts, and metadata of a comprehensive dataset of arXiv submissions, we have successfully provided valuable insights into the dynamic landscape of scientific research.
