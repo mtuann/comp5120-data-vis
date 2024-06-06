@@ -46,8 +46,31 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 ## Question 1: How has the number of preprints in different research areas related to Computer Science changed over time?
 
 ## Question 2: What are the most common keywords in the titles and abstracts of preprints in the field of Computer Science?
+
 ## Analysis of research topic frequencies over time
 
+![Comparative Analysis of Topics Clouds from arXiv Computer Science Abstracts (January vs. April 2024)](images/Slide12.png)
+![Comparative Analysis of Topics Clouds from arXiv Computer Science Abstracts (January vs. April 2024)](images/Slide13.png)
+
+The topics clouds extracted from the abstracts of arXiv Computer Science papers for January and April 2024 provide a visual representation of keyword frequencies and highlight shifts in research focus over the span of three months.
+
+January 2024
+In January, the cloud prominently features "natural language processing," "deep learning," and "machine learning" as central themes, reflecting a strong emphasis on foundational AI technologies. The presence of "language models" and "neural networks" underscores ongoing interest in model architectures and optimization techniques.
+
+April 2024
+By April, the cloud retains a strong presence of similar themes but with noticeable increases in "computer vision" and "reinforcement learning," indicating a pivot towards these applications. Newer terms like "diffusion models" and "federated learning" suggest a growing interest in generative models and privacy-preserving machine learning techniques while terms like "explainable", "graph neural network" disappeared.
+
+Consistent Core Areas: Despite the shifts, core areas like "deep learning," "machine learning," and "natural language processing" remain consistently prominent, indicating their foundational role in Computer Science research.
+
+### Barplot top 30 most frequency terms
+![Barplot top 30 most frequency terms](images/Slide14_1.png)
+![Barplot top 30 most frequency terms](images/Slide14_4.png)
+Newer terms like "diffusion models" and "federated learning" suggest a growing interest in generative models and privacy-preserving machine learning techniques. On the other hand, terms like "explainable", "graph neural network" are excluded from top used term.
+
+![Topics cloud extracted in Paper’s Title](images/Slide15.png)
+The topics cloud visually encapsulates key research trends in the Computer Science field, highlighting "large language models" and "natural language processing" as highly prominent areas. This indicates significant research activity focused on advancing language understanding technologies. "Deep learning" and "machine learning" are central, underscoring their foundational role in developing advanced computational methods. The term "artificial intelligence" spans various aspects, reflecting its broad and sustained research interest. Emerging terms like "federated learning" and "diffusion models" suggest growing interest.
+
+### Heatmap of Top 15 Tag Occurrences Over Time
 ![Heatmap of Top 15 Tag Occurrences Over Time](images/Slide16.png)
 
 The heatmap visualization delineates the occurrences of the top 15 tags associated with research topics over a six-month period, from December 2023 to May 2024.
