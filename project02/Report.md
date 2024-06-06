@@ -58,7 +58,7 @@ This heatmap allows us to pinpoint which research areas are garnering more atten
 
 ## Text complexity analysis across scientific disciplines
 
-![Readability Scores by Subject](images/Slide16.png)
+![Readability Scores by Subject](images/Slide17.png)
 
 Readability scores across various scientific disciplines are examined using the Flesch Reading Ease formula. The disciplines analyzed include Computer Science, Economics, Electrical Engineering, Mathematics, Physics, Quantitative Biology, Quantitative Finance, and Statistics. The scores are indicative of how accessible the text in research papers is, with higher scores suggesting easier readability.
 
