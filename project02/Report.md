@@ -43,15 +43,15 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 
 ![](images/data.png)
 
-## Question 1:
+## Question 1: How has the number of preprints in different research areas related to Computer Science changed over time?
 
-## Question 2:
+## Question 2: What are the most common keywords in the titles and abstracts of preprints in the field of Computer Science?
 
 # Conclusion:
 In this study, we have developed a suite of data visualizations to uncover hidden patterns and trends within arXiv preprints, focusing specifically on the field of Computer Science. By analyzing the titles, abstracts, and metadata of a comprehensive dataset of arXiv submissions, we have successfully provided valuable insights into the dynamic landscape of scientific research.
 
 Our analysis highlights several key findings:.
-- **Rapidly Growing Number of papers: ** Identifying rapidly growing topics and potential breakthroughs across Computer Science.
+- **Rapidly Growing Number of papers:** Rapidly growing number of paper Computer Science.
 - **Trends:** analysis revealed a set of common terms frequently appearing in the titles and abstracts of Computer Science preprints. 
 
 The visualizations and insights presented in this paper provide researchers, policymakers, and funding agencies with a clearer understanding of the evolving landscape of Computer Science research. By identifying rapidly growing topics and tracking changes in research focus, stakeholders can make informed decisions regarding research directions. Our work demonstrates the power of data-driven approaches in analyzing large-scale scientific data. The methodologies and findings of this study can be extended to other disciplines and datasets, offering a scalable solution for monitoring and understanding the progress of scientific research in the modern era. Future work could include expanding the dataset, incorporating more sophisticated natural language processing techniques, and developing predictive models to forecast future research trends.
