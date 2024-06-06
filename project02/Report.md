@@ -1,9 +1,6 @@
 ---
 title: "COMP4010/5120 - Project 2"
 author: "Vo Diep Nhu, Nguyen Minh Tuan, Kieu Hai Dang"
-output:
-  html_document: default
-  pdf_document: default
 ---
 ![](images/banner.png)
 
@@ -11,7 +8,9 @@ output:
 
 # Project:  Unveiling Research Trends with arXiv Data Visualization 
 
-**Data:** [`data`](https://github.com/mtuann/comp5120-data-vis/blob/main/project02/arxiv05_v2.csv)
+**Data:** 
+
+[`data`](https://github.com/mtuann/comp5120-data-vis/blob/main/project02/arxiv05_v2.csv)
 *High-Level Goal:** To leverage data visualization techniques to explore emerging research trends within the vast collection of arXiv open access preprints.
 
 **Goals and Motivation:** 
@@ -49,5 +48,10 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 ## Question 2:
 
 # Conclusion:
+In this study, we have developed a suite of data visualizations to uncover hidden patterns and trends within arXiv preprints, focusing specifically on the field of Computer Science. By analyzing the titles, abstracts, and metadata of a comprehensive dataset of arXiv submissions, we have successfully provided valuable insights into the dynamic landscape of scientific research.
 
-The analysis conducted reveals insightful trends in Valentine's Day celebrations and spending patterns over the years. Despite a general decline in the number of people participating in Valentine's Day festivities, a surge was observed in 2020 due to the COVID-19 pandemic, followed by a continuation of the downward trend post-pandemic. Conversely, expenditure on Valentine's Day activities exhibited a consistent upward trajectory between 2010 and 2022, with consumers anticipating an increase in spending per person, notably in categories such as Jewelry and Evening Dates. During the pandemic, while gift card purchases surged, other categories experienced a decline, particularly in dining out, which approached levels similar to clothing expenditure. Notably, jewelry emerged as the costliest gift category, more than doubling in average expenditure per person. Overall, the analysis indicates shifting trends in both participation and spending habits, influenced by external factors such as the pandemic.
+Our analysis highlights several key findings:.
+- **Rapidly Growing Number of papers: ** Identifying rapidly growing topics and potential breakthroughs across Computer Science.
+- **Trends:** analysis revealed a set of common terms frequently appearing in the titles and abstracts of Computer Science preprints. 
+
+The visualizations and insights presented in this paper provide researchers, policymakers, and funding agencies with a clearer understanding of the evolving landscape of Computer Science research. By identifying rapidly growing topics and tracking changes in research focus, stakeholders can make informed decisions regarding research directions. Our work demonstrates the power of data-driven approaches in analyzing large-scale scientific data. The methodologies and findings of this study can be extended to other disciplines and datasets, offering a scalable solution for monitoring and understanding the progress of scientific research in the modern era. Future work could include expanding the dataset, incorporating more sophisticated natural language processing techniques, and developing predictive models to forecast future research trends.
