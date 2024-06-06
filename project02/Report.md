@@ -48,7 +48,7 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 ## Question 2: What are the most common keywords in the titles and abstracts of preprints in the field of Computer Science?
 ## Analysis of research topic frequencies over time
 
-![Heatmap of Top 15 Tag Occurrences Over Time](image/Slide16.png)
+![Heatmap of Top 15 Tag Occurrences Over Time](images/Slide16.png)
 
 The heatmap visualization delineates the occurrences of the top 15 tags associated with research topics over a six-month period, from December 2023 to May 2024. This graphical representation is instrumental in identifying trends and shifts in research focus within the realm of computer science.
 The tags, representing various subfields such as machine learning ('cs.LG'), computer vision ('cs.CV'), and artificial intelligence ('cs.AI'), show varying levels of activity each month. Notably, the tag 'cs.CV' exhibited consistently high activity, indicating a strong and sustained focus on computer vision research.
@@ -58,7 +58,7 @@ This heatmap allows us to pinpoint which research areas are garnering more atten
 
 ## Text complexity analysis across scientific disciplines
 
-![Readability Scores by Subject](image/Slide16.png)
+![Readability Scores by Subject](images/Slide16.png)
 
 Readability scores across various scientific disciplines are examined using the Flesch Reading Ease formula. The disciplines analyzed include Computer Science, Economics, Electrical Engineering, Mathematics, Physics, Quantitative Biology, Quantitative Finance, and Statistics. The scores are indicative of how accessible the text in research papers is, with higher scores suggesting easier readability.
 
