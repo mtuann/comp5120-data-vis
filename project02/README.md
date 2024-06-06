@@ -17,6 +17,10 @@ This project presents a novel approach to navigating the vast ocean of arXiv pre
 
 How can data visualization techniques be used to uncover and communicate emerging trends within the arXiv open access preprints collection?
 
+Question 01:
+- What are the most common research topics across different scientific disciplines based on arXiv preprints?
+- How has the number of preprints in different research areas related to Computer Science changed over time?
+
 **Data Collection and Approach:**
 
 We plan to utilize existing tools and libraries to crawl data from arXiv preprints. This data will likely include titles, abstracts, publication dates, author affiliations, and potentially other relevant metadata fields depending on availability. We will then employ data cleaning and transformation techniques to prepare the data for visualization.

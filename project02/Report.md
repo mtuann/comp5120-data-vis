@@ -44,6 +44,36 @@ We utilize existing tools and libraries to crawl data from arXiv preprints. This
 ![](images/data.png)
 
 ## Question 1: How has the number of preprints in different research areas related to Computer Science changed over time?
+![](images/number_of_papers_by_month-2311-2404.png)
+![](images/number_of_papers_by_day.png)
+![](images/number_of_papers_by_subject-2311-2404.png)
+![](images/word_cloud_multi_subjects.png)
+![](images/number_of_papers_by_subject_heatmap.png)
+![](images/number_of_papers_by_subject_bubble_2406.png)
+
+Dominant Intersections:
+
+- The strongest co-occurrences are between "math" and "Statistics" (181), "math" and "Electrical Engineering" (335), and "Statistics" and "Electrical Engineering" (181). This suggests a strong overlap between these fields and computer science in the dataset.
+
+Limited Interaction:
+
+- The values for "cs" co-occurring with "Economics" and "Quantitative Finance" are very low (2 and 0 respectively). This indicates a minimal intersection between these specific areas and computer science in this dataset.
+
+Frequent Combinations:
+
+- The most frequent combinations involving "cs" are with "eess" (electrical engineering) at over 4,300 papers, followed by "math" (mathematics) at over 1,300 papers, and then "stat" (statistics) at over 2,700 papers. This suggests a strong intersection between computer science and these related fields.
+
+Interdisciplinary Research:
+
+- There are numerous papers with combinations of four tags, including "cs, econ, math, stat" (16 papers) and "cs, eess, math, physics" (3 papers). This highlights the presence of interdisciplinary research that combines computer science with other areas like economics, physics, and biology.
+
+Statistics as a Bridge:
+
+- "Stat" (statistics) appears frequently in many combinations with "cs" and other tags. This suggests that statistical methods are a common tool used across various subfields of computer science.
+
+Less Frequent Combinations:
+
+- Combinations involving "q-bio" (quantitative biology) and "q-fin" (quantitative finance) are less frequent compared to others. This might indicate these areas have a smaller intersection with the core computer science research in this dataset.
 
 ## Question 2: What are the most common keywords in the titles and abstracts of preprints in the field of Computer Science?
 
